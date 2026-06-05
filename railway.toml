@@ -1,9 +1,7 @@
-# Деплой всего репозитория (backend + tyva-transit-ui рядом)
 [build]
 builder = "NIXPACKS"
-buildCommand = "pip install -r tyva-transit-backend/requirements.txt && cd tyva-transit-backend && python manage.py collectstatic --noinput && python manage.py migrate --noinput"
 
 [deploy]
-startCommand = "cd tyva-transit-backend && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+startCommand = "cd tyva-transit-backend && python manage.py migrate --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
 healthcheckPath = "/"
 restartPolicyType = "ON_FAILURE"
