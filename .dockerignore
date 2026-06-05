@@ -1,0 +1,13 @@
+.git
+.venv
+venv
+__pycache__
+*.pyc
+*.pyo
+.env
+*.sqlite3
+staticfiles
+sent_emails
+.idea
+.vscode
+terminals
