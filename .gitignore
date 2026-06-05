@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.sqlite3
+
+# Секреты
+.env
+*.env.local
+
+# IDE
+.idea/
+.vscode/
+*.log
+
+# Django
+staticfiles/
+sent_emails/
+
+# OS
+Thumbs.db
+Desktop.ini

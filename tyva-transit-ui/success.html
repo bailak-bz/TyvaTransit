@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Билет оплачен — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="mockup-banner">Макет UI — пример после успешной оплаты</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html">Общие рейсы</a>
+        <a href="private.html">Личная поездка</a>
+        <a href="check.html">Мои билеты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="success-box">
+        <div class="success-icon">✓</div>
+        <span class="badge badge-ok">Оплачено</span>
+        <h1 class="page-title" style="margin: 0.75rem 0 0.5rem;">Билет оформлен</h1>
+        <p class="page-lead" style="margin: 0 auto 1rem;">Места закреплены. Сохраните номер билета — он уже действителен, ждать подтверждения не нужно.</p>
+
+        <p style="margin: 0; font-size: 0.9rem; color: var(--muted);">Номер билета</p>
+        <div class="booking-code">TYV-T-2026-9152</div>
+
+        <ul class="info-list" style="text-align: left; margin: 1.5rem 0;">
+          <li><strong>Рейс</strong> <span>Кызыл → Чагытай</span></li>
+          <li><strong>Выезд</strong> <span>15 июня 2026, 06:00</span></li>
+          <li><strong>Сбор</strong> <span>ул. Кочетова, 2</span></li>
+          <li><strong>Билетов</strong> <span>2</span></li>
+          <li><strong>Оплачено</strong> <span>3 600 ₽</span></li>
+          <li><strong>Статус</strong> <span><span class="badge badge-ok">Оплачено</span></span></li>
+        </ul>
+
+        <p style="font-size: 0.9rem; color: var(--muted);">Чек и билет отправлены на указанный телефон. Покажите номер билета при посадке.</p>
+
+        <div class="success-actions">
+          <a href="check.html" class="btn btn-secondary">Мои билеты</a>
+          <a href="trips.html" class="btn btn-primary">Другие рейсы</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+  <script src="js/success-display.js"></script>
+</body>
+</html>

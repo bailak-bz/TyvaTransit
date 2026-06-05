@@ -1,0 +1,22 @@
+(function () {
+  const track = document.querySelector('[data-home-trips]');
+  if (!track) return;
+
+  const section = track.closest('.swipe-section');
+  const dotsWrap = section && section.querySelector('[data-swipe-dots]');
+
+  TyvaApi.getTrips({ available_only: 'no' })
+    .then((trips) => {
+      const upcoming = trips.slice(0, 6);
+      if (!upcoming.length) {
+        track.innerHTML = '<div class="swipe-slide"><p class="card-meta">Рейсы скоро появятся в расписании.</p></div>';
+      } else {
+        track.innerHTML = upcoming.map((trip) => TyvaTrips.renderCard(trip, 'slide')).join('');
+      }
+      if (dotsWrap) dotsWrap.innerHTML = '';
+      if (window.TyvaSwipe) window.TyvaSwipe.initTrack(track);
+    })
+    .catch((err) => {
+      track.innerHTML = `<div class="swipe-slide"><p class="card-meta">Не удалось загрузить рейсы: ${err.message}</p></div>`;
+    });
+})();

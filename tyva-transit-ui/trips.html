@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Общие рейсы — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="mockup-banner">Макет UI — данные примерные, без сервера</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html" class="active">Общие рейсы</a>
+        <a href="private.html">Личная поездка</a>
+        <a href="destinations.html">Направления</a>
+        <a href="check.html">Моя бронь</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Главная</a> / Рейсы
+      </nav>
+      <div class="page-tabs">
+        <a href="private.html">Личная поездка</a>
+        <a href="trips.html" class="active">Общие рейсы</a>
+      </div>
+
+      <h1 class="page-title">Общие рейсы по расписанию</h1>
+      <p class="page-lead">
+        <span class="badge badge-shared">Могут быть другие пассажиры</span>
+        Покупаете одно или несколько мест. Если нужна машина только для своей компании —
+        <a href="private-book.html">закажите личную поездку</a>.
+      </p>
+
+      <form class="filters" action="#" onsubmit="return false;">
+        <div class="filter-group">
+          <label for="dest">Направление</label>
+          <select id="dest" name="dest">
+            <option value="">Все направления</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="date">Дата от</label>
+          <input type="date" id="date" name="date" value="2026-06-14">
+        </div>
+        <div class="filter-group">
+          <label for="seats">Только с местами</label>
+          <select id="seats" name="seats">
+            <option value="no">Показать все</option>
+            <option value="yes">Только с местами</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm">Применить</button>
+      </form>
+
+      <div class="card-grid">
+        <p class="card-meta">Загрузка рейсов…</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+      <div><a href="contacts.html">Контакты</a></div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/trips-list.js"></script>
+</body>
+</html>

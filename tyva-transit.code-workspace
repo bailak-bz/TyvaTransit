@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "name": "backend",
+      "path": "tyva-transit-backend"
+    },
+    {
+      "name": "frontend",
+      "path": "tyva-transit-ui"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder:backend}/.venv/Scripts/python.exe"
+  }
+}

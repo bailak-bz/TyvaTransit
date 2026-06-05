@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Кызыл → Чагытай — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="mockup-banner">Макет UI — данные примерные, без сервера</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html" class="active">Общие рейсы</a>
+        <a href="private.html">Личная поездка</a>
+        <a href="check.html">Моя бронь</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Главная</a> /
+        <a href="trips.html">Рейсы</a> /
+        Кызыл → Чагытай
+      </nav>
+
+      <div class="detail-layout">
+        <div class="detail-main">
+          <div class="detail-hero">
+            <span class="badge badge-shared" style="margin-bottom: 0.35rem;">Общий рейс</span>
+            <span class="badge" data-seats-badge style="margin-bottom: 0.5rem;">Загрузка…</span>
+            <h1>Кызыл → Озеро Чагытай</h1>
+            <p>15 июня 2026 · выезд в 06:00</p>
+          </div>
+          <div class="detail-content">
+            <h2 style="margin-top: 0; font-size: 1.1rem;">О рейсе</h2>
+            <p>Общий выезд: в салоне могут быть и другие группы, если остались свободные места. Для поездки без чужих —
+              <a href="private-book.html">личная поездка на свою дату</a>.
+            </p>
+
+            <ul class="info-list">
+              <li><strong>Откуда</strong> <span>г. Кызыл, ул. Кочетова, 2 (сбор группы)</span></li>
+              <li><strong>Куда</strong> <span>Озеро Чагытай, база отдыха «Южный берег»</span></li>
+              <li><strong>В пути</strong> <span>около 3,5 часов</span></li>
+              <li><strong>Вместимость</strong> <span>12 пассажиров</span></li>
+              <li><strong>Багаж</strong> <span>1 сумка на человека, крупный багаж — по телефону</span></li>
+              <li><strong>Минимум группы</strong> <span>Рейс состоится в случае, если куплено хотя бы 3 билета</span>
+              </li>
+            </ul>
+
+            <h2 style="font-size: 1.1rem;">Важно знать</h2>
+            <ul>
+              <li>Оплата онлайн при покупке билета — места закрепляются сразу.</li>
+              <li>Отмена бесплатная за 24 часа до выезда.</li>
+              <li>Детям до 5 лет — уточняйте при бронировании в комментарии.</li>
+            </ul>
+          </div>
+        </div>
+
+        <aside class="detail-sidebar">
+          <p class="card-price">1 800 ₽ <span style="font-size: 0.85rem; font-weight: 400;">/ место</span></p>
+          <p class="card-meta" data-trip-seats-meta>Загрузка…</p>
+          <div class="seats-bar" aria-hidden="true">
+            <div class="seats-bar-fill" style="width: 42%;"></div>
+          </div>
+          <a href="book.html" class="btn btn-primary btn-block">Купить билет</a>
+          <a href="lake-chagytay.html" class="btn btn-secondary btn-block" style="margin-top: 0.5rem;">О озере Чагытай</a>
+          <a href="trips.html" class="btn btn-secondary btn-block"
+            style="margin-top: 0.5rem; background: transparent; color: var(--lake); border: 1px solid var(--lake);">←
+            Все рейсы</a>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+      <div><a href="tel:+79991234567">+7 (999) 123-45-67</a></div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/trip-detail.js"></script>
+</body>
+
+</html>

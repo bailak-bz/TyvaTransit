@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: tyva_transit
+      POSTGRES_USER: tyva
+      POSTGRES_PASSWORD: tyva
+    ports:
+      - "5432:5432"
+    volumes:
+      - tyva_pg_data:/var/lib/postgresql/data
+
+volumes:
+  tyva_pg_data:

@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Контакты и вопросы — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="mockup-banner">Макет UI — данные примерные</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html">Общие рейсы</a>
+        <a href="private.html">Личная поездка</a>
+        <a href="check.html">Моя бронь</a>
+        <a href="contacts.html" class="active">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Контакты</h1>
+      <p class="page-lead">ИП Ширин-оол Долаана Май-ооловна — групповые транзиты из Кызыла.</p>
+
+      <div class="card" style="max-width: 480px; margin-bottom: 2rem;">
+        <div class="card-body">
+          <ul class="info-list">
+            <li><strong>Телефон</strong> <a href="tel:+79991234567">+7 (999) 123-45-67</a></li>
+            <li><strong>Telegram</strong> <span>@tyva_transit</span></li>
+            <li><strong>Адрес</strong> <span>г. Кызыл, Республика Тыва</span></li>
+            <li><strong>Режим</strong> <span>ежедневно 8:00–20:00 (летний сезон)</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="section-title">Частые вопросы</h2>
+      <details class="faq-item">
+        <summary>Нужна ли регистрация на сайте?</summary>
+        <p>Нет. Для общего рейса — имя, телефон и оплата на сайте. Для личной поездки — заявка с последующим подтверждением.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Нужно ли ждать подтверждения после покупки билета?</summary>
+        <p>Нет. На общие рейсы билет действует сразу после оплаты — места закреплены автоматически. Заявки перевозчику не создаются.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Как оплатить билет?</summary>
+        <p>На странице «Купить билет» — СБП или банковская карта (в боевой системе — ЮKassa или аналог).</p>
+      </details>
+      <details class="faq-item">
+        <summary>Чем личная поездка отличается от рейса в расписании?</summary>
+        <p>В расписании вы покупаете места, и к рейсу могут присоединиться другие. Личная поездка — машина под вашу компанию на выбранную вами дату, посторонних не записывают.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Можно ли забронировать обратно в Кызыл?</summary>
+        <p>Да: в общих рейсах — отдельный билет; в личной поездке — галочка «туда-обратно» в форме.</p>
+      </details>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+</body>
+</html>

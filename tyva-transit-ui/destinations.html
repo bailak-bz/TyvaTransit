@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Направления — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="mockup-banner">Макет UI — данные примерные</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html">Общие рейсы</a>
+        <a href="private.html">Личная поездка</a>
+        <a href="destinations.html" class="active">Направления</a>
+        <a href="check.html">Мои билеты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Куда едем из Кызыла</h1>
+      <p class="page-lead">Популярные озёра Тывы. У каждого направления — описание и фото; рейсы — в расписании.</p>
+
+      <div class="card-grid">
+        <article class="card">
+          <div class="card-image card-image--chagytay"><span class="card-image__title">Чагытай</span></div>
+          <div class="card-body">
+            <p>Одно из самых посещаемых озёр. Подходит для групп на 1–2 дня.</p>
+            <p class="card-meta">от 1 800 ₽ / место</p>
+            <div class="card-actions">
+              <a href="lake-chagytay.html" class="btn btn-secondary btn-sm">О озере</a>
+              <a href="trips.html?lake=chagytay" class="btn btn-primary btn-sm">Рейсы</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-image card-image--tereh"><span class="card-image__title">Тере-Холь</span></div>
+          <div class="card-body">
+            <p>Спокойное направление, часто выбирают семьи.</p>
+            <p class="card-meta">от 2 000 ₽ / место</p>
+            <div class="card-actions">
+              <a href="lake-tereh-hol.html" class="btn btn-secondary btn-sm">О озере</a>
+              <a href="trips.html?lake=tereh-hol" class="btn btn-primary btn-sm">Рейсы</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-image card-image--azas"><span class="card-image__title">Азас</span></div>
+          <div class="card-body">
+            <p>Горное озеро для уединённого отдыха — смотрите рейсы в расписании.</p>
+            <p class="card-meta">от 2 200 ₽ / место</p>
+            <div class="card-actions">
+              <a href="lake-azas.html" class="btn btn-secondary btn-sm">О озере</a>
+              <a href="trips.html?lake=azas" class="btn btn-primary btn-sm">Рейсы</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+</body>
+</html>

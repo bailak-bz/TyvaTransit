@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Заказ личной поездки — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="mockup-banner">Макет UI — календарь и цены примерные</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html">Общие рейсы</a>
+        <a href="private.html" class="active">Личная поездка</a>
+        <a href="check.html">Моя бронь</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="private.html">← Личная поездка</a>
+      </nav>
+
+      <div class="page-tabs">
+        <a href="private.html" class="active">Личная поездка</a>
+        <a href="trips.html">Общие рейсы</a>
+      </div>
+
+      <h1 class="page-title">Заказ на свою дату</h1>
+      <p class="page-lead">
+        <span class="badge badge-private">Без посторонних</span>
+        После подтверждения этот выезд не появится в общем расписании для других пассажиров.
+      </p>
+
+      <div class="form-panel form-panel--wide">
+        <form action="#" method="post">
+          <div class="form-group">
+            <label for="route">Направление</label>
+            <select id="route" name="route" required>
+              <option value="">Выберите</option>
+              <option selected>Кызыл → Озеро Чагытай</option>
+              <option>Кызыл → Озеро Тере-Холь</option>
+              <option>Кызыл → Азас</option>
+              <option>Другое (указать в комментарии)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="date-out">Дата выезда из Кызыла</label>
+            <input type="date" id="date-out" name="date-out" value="2026-06-20" required>
+            <p class="calendar-hint">Серые даты в боевой системе будут заняты — здесь только поле выбора.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="time">Желаемое время выезда</label>
+            <select id="time" name="time">
+              <option>06:00 – 07:00</option>
+              <option>07:00 – 08:00</option>
+              <option>Другое (в комментарии)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="roundtrip">
+              <span>Нужен обратный выезд (озеро → Кызыл)</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="date-back">Дата обратно</label>
+            <input type="date" id="date-back" name="date-back" value="2026-06-22">
+            <p class="form-hint">Заполняется, если отмечен обратный выезд</p>
+          </div>
+
+          <div class="form-group">
+            <label>Сколько человек в вашей компании</label>
+            <div class="counter">
+              <button type="button" aria-label="Уменьшить">−</button>
+              <input type="number" value="6" min="1" max="12" readonly>
+              <button type="button" aria-label="Увеличить">+</button>
+            </div>
+            <p class="form-hint">Чужих к вам не добавят — указываем размер вашей группы для подбора машины</p>
+          </div>
+
+          <div class="form-group">
+            <label>Тип машины</label>
+            <div class="vehicle-options">
+              <label class="vehicle-option">
+                <input type="radio" name="vehicle" value="12" checked>
+                <div>
+                  <strong>Микроавтобус · до 12 мест</strong>
+                  <p class="form-hint" style="margin: 0;">Подходит для вашей группы · <strong>18 000 ₽</strong> туда</p>
+                </div>
+              </label>
+              <label class="vehicle-option">
+                <input type="radio" name="vehicle" value="8">
+                <div>
+                  <strong>Минивэн · до 8 мест</strong>
+                  <p class="form-hint" style="margin: 0;">Если вас 4–8 человек · <strong>14 000 ₽</strong> туда</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="order-summary">
+            <dl>
+              <dt>Тип заказа</dt>
+              <dd>Личная поездка</dd>
+              <dt>Туда (20.06)</dt>
+              <dd>18 000 ₽</dd>
+              <dt>Обратно (22.06)</dt>
+              <dd>+ 18 000 ₽</dd>
+              <dt class="total">Итого (ориентир)</dt>
+              <dd class="total">36 000 ₽</dd>
+            </dl>
+            <p class="form-hint">Точную сумму подтвердит перевозчик после проверки даты и машины.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="name">Имя контакта</label>
+            <input type="text" id="name" name="name" required placeholder="Кто отвечает за группу">
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="tel" id="phone" name="phone" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <p class="form-hint">На этот адрес придёт номер заявки и билет после подтверждения</p>
+            <input type="email" id="email" name="email" required placeholder="example@mail.ru">
+          </div>
+
+          <div class="form-group">
+            <label for="comment">Комментарий</label>
+            <textarea id="comment" name="comment" placeholder="Точка сбора, дети, багаж, пожелания по маршруту…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" required>
+              <span>Понимаю: это заказ всей поездки под мою группу, а не покупка мест в общем рейсе</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Отправить заявку на личную поездку</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/private-booking.js"></script>
+</body>
+</html>

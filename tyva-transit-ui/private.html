@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Личная поездка — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="mockup-banner">Макет UI — личная поездка = вся машина только для вашей группы</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html">Общие рейсы</a>
+        <a href="private.html" class="active">Личная поездка</a>
+        <a href="destinations.html">Направления</a>
+        <a href="check.html">Моя бронь</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Главная</a> / Личная поездка
+      </nav>
+
+      <div class="page-tabs">
+        <a href="private.html" class="active">Личная поездка</a>
+        <a href="trips.html">Общие рейсы</a>
+      </div>
+
+      <h1 class="page-title">Личная поездка для вашей компании</h1>
+      <p class="page-lead">
+        Выезжаете друзьями или семьёй и не хотите, чтобы к вам в машину записали чужих?
+        Заказываете транзит на <strong>свою дату</strong> — салон только под вас.
+      </p>
+
+      <div class="mode-cards" style="margin-top: 0;">
+        <article class="mode-card featured">
+          <h3>Чем отличается от расписания</h3>
+          <ul>
+            <li><strong>Общий рейс</strong> — фиксированная дата, покупаете 1–N мест, остальное могут занять другие.</li>
+            <li><strong>Личная поездка</strong> — вы выбираете дату; после подтверждения рейс закрыт для посторонних.</li>
+          </ul>
+        </article>
+        <article class="mode-card">
+          <h3>Как это работает</h3>
+          <ol style="margin: 0; padding-left: 1.2rem; color: var(--muted);">
+            <li>Направление и дата в календаре</li>
+            <li>Сколько человек и какая машина</li>
+            <li>Заявка → перевозчик подтверждает</li>
+            <li>Оплата по договорённости</li>
+          </ol>
+          <a href="private-book.html" class="btn btn-primary" style="margin-top: 1rem;">Оформить заявку</a>
+        </article>
+      </div>
+
+      <h2 class="section-title">Популярные направления (личный заказ)</h2>
+      <div class="card-grid">
+        <article class="card">
+          <div class="card-image card-image--chagytay"><span class="card-image__title">Чагытай</span></div>
+          <div class="card-body">
+            <p class="card-meta">от <span class="price-vehicle">18 000 ₽</span> за машину</p>
+            <p>Микроавтобус до 12 мест · ~3,5 ч</p>
+            <div class="card-actions">
+              <a href="lake-chagytay.html" class="btn btn-secondary btn-sm">О озере</a>
+              <a href="private-book.html" class="btn btn-primary btn-sm">Выбрать дату</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-image card-image--tereh"><span class="card-image__title">Тере-Холь</span></div>
+          <div class="card-body">
+            <p class="card-meta">от <span class="price-vehicle">20 000 ₽</span> за машину</p>
+            <p>До 10 мест · маршрут уточняется</p>
+            <div class="card-actions">
+              <a href="lake-tereh-hol.html" class="btn btn-secondary btn-sm">О озере</a>
+              <a href="private-book.html" class="btn btn-primary btn-sm">Выбрать дату</a>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-image card-image--azas"><span class="card-image__title">Азас</span></div>
+          <div class="card-body">
+            <p>Горное озеро — цену и дату уточняет перевозчик.</p>
+            <div class="card-actions">
+              <a href="lake-azas.html" class="btn btn-secondary btn-sm">О озере</a>
+              <a href="private-book.html" class="btn btn-primary btn-sm">Своя дата</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <h2 class="section-title">Частые вопросы</h2>
+      <details class="faq-item">
+        <summary>Можно ли ехать нас 4 человека, а мест в машине 12?</summary>
+        <p>Да. Вы платите за машину (или за тариф «личная поездка»), остальные места остаются пустыми — чужих не сажают.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Любая дата?</summary>
+        <p>В календаре показываются свободные дни. Занятые даты (уже личные или общие рейсы) недоступны.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Нужен обратный выезд?</summary>
+        <p>В форме можно отметить «туда-обратно» и вторую дату — одной заявкой.</p>
+      </details>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+      <div><a href="contacts.html">Контакты</a></div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+</body>
+</html>

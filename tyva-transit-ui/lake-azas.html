@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Озеро Азас — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="mockup-banner">Макет UI — фото локальные (в папке images/ можно заменить на .jpg)</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html">Общие рейсы</a>
+        <a href="private.html">Личная поездка</a>
+        <a href="destinations.html">Направления</a>
+        <a href="check.html">Мои билеты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Главная</a> / <a href="destinations.html">Направления</a> / Азас
+      </nav>
+
+      <article class="lake-page">
+        <div class="lake-hero lake-hero--azas">
+          <h1 class="page-title">Озеро Азас</h1>
+          <p class="lake-hero-meta">Республика Тыва · горное озеро</p>
+        </div>
+
+        <section class="swipe-section swipe-section--lake-gallery" aria-label="Фотографии озера">
+          <div class="swipe-section__header">
+            <div class="swipe-section__controls">
+              <div class="swipe-dots" data-swipe-dots role="tablist" aria-label="Фото"></div>
+            </div>
+          </div>
+          <div class="swipe-viewport">
+            <button type="button" class="swipe-nav swipe-nav--prev" data-swipe-prev aria-label="Предыдущее фото">‹</button>
+            <button type="button" class="swipe-nav swipe-nav--next" data-swipe-next aria-label="Следующее фото">›</button>
+            <div class="swipe-track" data-swipe-track tabindex="0">
+              <div class="swipe-slide">
+                <img src="images/azas-1.jpg" alt="Озеро Азас" width="600" height="450" loading="lazy">
+              </div>
+              <div class="swipe-slide">
+                <img src="images/azas-2.jpg" alt="Горные склоны у Азас" width="600" height="450" loading="lazy">
+              </div>
+              <div class="swipe-slide">
+                <img src="images/azas-3.jpg" alt="Ночное небо над Азас" width="600" height="450" loading="lazy">
+              </div>
+              <div class="swipe-slide">
+                <img src="images/azas-4.jpg" alt="Берег озера Азас" width="600" height="450" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="lake-content detail-content" style="background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); margin-top: 1.25rem;">
+          <h2 style="margin-top: 0;">О озере</h2>
+          <p>Азас — озеро в горах Тывы, привлекательное для любителей дикой природы и уединённого отдыха. Маршрут из Кызыла лучше планировать заранее: часть выездов формируется по расписанию или по заявке на личную поездку.</p>
+          <p>Для групп друзей удобно заказать транзит целиком — в салоне будут только ваши, без посторонних пассажиров.</p>
+          <ul>
+            <li>Направление для опытных путешественников и летнего сезона</li>
+            <li>Уточняйте даты выезда в актуальном расписании</li>
+            <li>Снаряжение и запас еды — с собой</li>
+          </ul>
+
+          <div class="card-actions" style="margin-top: 1.25rem;">
+            <a href="trips.html?lake=azas" class="btn btn-primary">Рейсы на Азас</a>
+            <a href="private-book.html" class="btn btn-secondary">Личная поездка</a>
+            <a href="destinations.html" class="btn btn-secondary" style="background: transparent; color: var(--lake); border: 1px solid var(--lake);">Все направления</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+  <script src="js/swipe-sections.js"></script>
+</body>
+</html>
