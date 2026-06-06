@@ -14,10 +14,13 @@ DEBUG = os.getenv('DEBUG', 'True').lower() in ('1', 'true', 'yes')
 
 ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if h.strip()]
 _railway_domain = os.getenv('RAILWAY_PUBLIC_DOMAIN', '')
+_on_railway = os.getenv('RAILWAY_ENVIRONMENT') is not None
 if _railway_domain:
     ALLOWED_HOSTS.append(_railway_domain)
-if not DEBUG:
-    ALLOWED_HOSTS.extend(['.up.railway.app', '.railway.app', 'healthcheck.railway.app'])
+# Railway healthcheck sends Host: healthcheck.railway.app (even when DEBUG=True)
+ALLOWED_HOSTS.append('healthcheck.railway.app')
+if _on_railway or not DEBUG:
+    ALLOWED_HOSTS.extend(['.up.railway.app', '.railway.app'])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
