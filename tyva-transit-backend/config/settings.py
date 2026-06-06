@@ -17,7 +17,7 @@ _railway_domain = os.getenv('RAILWAY_PUBLIC_DOMAIN', '')
 if _railway_domain:
     ALLOWED_HOSTS.append(_railway_domain)
 if not DEBUG:
-    ALLOWED_HOSTS.extend(['.up.railway.app', '.railway.app'])
+    ALLOWED_HOSTS.extend(['.up.railway.app', '.railway.app', 'healthcheck.railway.app'])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
