@@ -43,13 +43,18 @@ Railway прочитает `railway.toml` в корне и сам соберёт
 
 ---
 
-## Шаг 3. PostgreSQL
+## Шаг 3. PostgreSQL (обязательно)
 
 1. В проекте Railway: **+ New** → **Database** → **PostgreSQL**
-2. Откройте ваш **Web-сервис** (Django) → вкладка **Variables**
-3. Нажмите **Add Reference** → выберите `DATABASE_URL` из PostgreSQL
+2. Откройте **Web-сервис** (не базу!) → вкладка **Variables**
+3. **+ New Variable** → **Add Reference**
+4. Выберите сервис **PostgreSQL** → переменную **`DATABASE_URL`**
+5. Сохраните и **Redeploy** Web-сервис
 
-Переменная `DATABASE_URL` подставится автоматически — Django её уже понимает.
+Без этого приложение падает при `migrate` и healthcheck не проходит.
+
+Проверка: в Variables Web-сервиса должна быть строка вида  
+`DATABASE_URL = ${{Postgres.DATABASE_URL}}` (имя сервиса может отличаться).
 
 ---
 
