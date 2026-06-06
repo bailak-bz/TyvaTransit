@@ -9,6 +9,16 @@
   const pageTitle = document.querySelector('.page-title');
   const pageLead = document.querySelector('.page-lead');
 
+  function todayISO() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  if (dateInput && !dateInput.value) {
+    dateInput.value = todayISO();
+  }
+
   const urlLake = new URLSearchParams(window.location.search).get('lake')
     || new URLSearchParams(window.location.search).get('destination');
 
