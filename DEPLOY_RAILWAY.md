@@ -134,9 +134,16 @@ git push
 
 ## Частые проблемы
 
-### «Application failed to respond»
-- Проверьте логи: сервис → **Deployments** → **View logs**
-- Убедитесь, что в репозитории есть **обе** папки: `backend` и `tyva-transit-ui`
+### Healthcheck failed
+
+1. Откройте **Deployments** → последний деплой → **View logs** (не Agent).
+2. Ищите строки:
+   - `ERROR: DATABASE_URL is not set` → привяжите PostgreSQL (шаг 3)
+   - `ERROR: SECRET_KEY is not set` → добавьте SECRET_KEY
+   - `migrate failed` → база не доступна; проверьте Reference на DATABASE_URL
+   - `Frontend not found` → в репозитории нет `tyva-transit-ui`
+3. Проверка вручную после деплоя: `https://ВАШ-ДОМЕН.up.railway.app/health/` → должно быть `{"status": "ok"}`
+4. **Redeploy** с **Clear build cache** после исправления Variables.
 
 ### 502 / ошибка БД
 - PostgreSQL добавлен и `DATABASE_URL` привязан к Web-сервису
