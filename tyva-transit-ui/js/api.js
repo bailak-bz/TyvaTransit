@@ -3,16 +3,13 @@
 
   function resolveApiBase() {
     if (global.TYVA_API_BASE) return String(global.TYVA_API_BASE).replace(/\/$/, '');
-    const { protocol, hostname, port } = global.location;
-    // Файл открыт двойным кликом (file://) или Live Server — API на Django :8000
+    const { protocol, port } = global.location;
+    // Локальная вёрстка без Django: file:// или Live Server
     if (protocol === 'file:' || port === '5500' || port === '5501' || port === '5173') {
       return `${BACKEND_URL}/api`;
     }
-    // Сайт открыт через python manage.py runserver
-    if (port === '8000' || (!port && (hostname === '127.0.0.1' || hostname === 'localhost'))) {
-      return '/api';
-    }
-    return `${BACKEND_URL}/api`;
+    // Django runserver и прод (Railway) — API на том же домене
+    return '/api';
   }
 
   const API_BASE = resolveApiBase();
