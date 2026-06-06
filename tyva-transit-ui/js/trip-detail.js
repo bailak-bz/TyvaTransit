@@ -5,7 +5,6 @@
     return;
   }
 
-  const banner = document.querySelector('.mockup-banner');
   const title = document.querySelector('.detail-hero h1');
   const heroMeta = document.querySelector('.detail-hero p');
   const seatsBadgeEl = document.querySelector('[data-seats-badge]');
@@ -18,8 +17,6 @@
   TyvaApi.getTrip(tripId).then((trip) => {
     const available = TyvaSeats.available(trip);
     const badge = TyvaSeats.badge(available);
-
-    if (banner) banner.textContent = 'Данные с сервера';
     const date = new Date(trip.departure_at).toLocaleString('ru-RU', {
       day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit',
     });
@@ -53,7 +50,7 @@
       }
     }
   }).catch((err) => {
-    if (banner) banner.textContent = `Ошибка: ${err.message}`;
+    alert(`Ошибка: ${err.message}`);
     if (seatsBadgeEl) {
       seatsBadgeEl.className = 'badge badge-full';
       seatsBadgeEl.textContent = 'Нет данных';

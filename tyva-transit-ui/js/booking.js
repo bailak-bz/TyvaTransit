@@ -11,7 +11,6 @@
   const priceEl = form.querySelector('.order-summary dd:first-of-type');
   const submitBtn = form.querySelector('button[type="submit"]');
   const lead = document.querySelector('.page-lead');
-  const banner = document.querySelector('.mockup-banner');
 
   let trip = null;
 
@@ -60,7 +59,6 @@
 
   TyvaApi.getTrip(tripId).then((data) => {
     trip = data;
-    if (banner) banner.textContent = 'Демо-оплата: деньги не списываются. Билет придёт на email.';
     if (lead) {
       lead.innerHTML = `
         <span class="badge badge-shared">Общий рейс</span>
@@ -68,12 +66,12 @@
         <a href="private-book.html">Нужна машина только для вашей группы?</a>`;
     }
     if (priceEl) priceEl.textContent = formatMoney(trip.price_per_seat);
-    if (TyvaSeats.available(trip) === 0 && banner) {
-      banner.textContent = 'На этот рейс мест нет. Вернитесь в расписание и выберите другой выезд.';
+    if (TyvaSeats.available(trip) === 0 && lead) {
+      lead.textContent = 'На этот рейс мест нет. Вернитесь в расписание и выберите другой выезд.';
     }
     updateSummary();
   }).catch((err) => {
-    if (banner) banner.textContent = `Ошибка загрузки рейса: ${err.message}`;
+    alert(`Ошибка загрузки рейса: ${err.message}`);
   });
 
   form.addEventListener('submit', async (event) => {

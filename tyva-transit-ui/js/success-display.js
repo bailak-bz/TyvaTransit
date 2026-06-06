@@ -6,24 +6,12 @@
   const booking = raw ? JSON.parse(raw) : null;
   if (!booking) return;
 
-  const banner = document.querySelector('.mockup-banner');
   const codeEl = document.querySelector('.booking-code');
   const list = document.querySelector('.info-list');
   const note = document.querySelector('.success-box p:last-of-type');
   const emailSent = sessionStorage.getItem('tyva_email_sent') !== '0';
   const emailError = sessionStorage.getItem('tyva_email_error');
 
-  if (banner) {
-    if (emailSent) {
-      banner.textContent = 'Билет отправлен на указанный email.';
-      banner.style.background = '';
-      banner.style.color = '';
-    } else {
-      banner.textContent = 'Билет оформлен, но письмо не ушло. Настройте почту в .env на сервере.';
-      banner.style.background = '#fff3cd';
-      banner.style.color = '#664d03';
-    }
-  }
   if (codeEl) codeEl.textContent = booking.code;
 
   function formatDate(value) {

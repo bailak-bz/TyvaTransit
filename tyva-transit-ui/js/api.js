@@ -14,16 +14,9 @@
 
   const API_BASE = resolveApiBase();
 
-  function showApiHint() {
-    const banner = document.querySelector('.mockup-banner');
-    if (!banner) return;
-    banner.textContent = `Нет связи с сервером. Запустите: python manage.py runserver и откройте ${BACKEND_URL}`;
-    banner.style.background = '#f8d7da';
-    banner.style.color = '#842029';
-  }
-
-  if (global.location.protocol === 'file:') {
-    document.addEventListener('DOMContentLoaded', showApiHint);
+  function showApiHint(message) {
+    if (global.location.protocol !== 'file:') return;
+    alert(message || `Откройте сайт через сервер: ${BACKEND_URL}`);
   }
 
   async function request(path, options = {}) {

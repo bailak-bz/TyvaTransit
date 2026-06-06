@@ -804,15 +804,6 @@ main {
   color: var(--sand);
 }
 
-.mockup-banner {
-  background: #fff3cd;
-  color: #664d03;
-  text-align: center;
-  padding: 0.4rem;
-  font-size: 0.8rem;
-  border-bottom: 1px solid #ffc107;
-}
-
 .breadcrumb {
   font-size: 0.85rem;
   color: var(--muted);
@@ -1403,12 +1394,6 @@ main {
     margin: 1rem auto;
     padding: 1.5rem 1rem;
   }
-
-  .mockup-banner {
-    font-size: 0.72rem;
-    padding: 0.35rem 0.5rem;
-    line-height: 1.35;
-  }
 }
 
 /* Узкий телефон: выезжающее меню */
@@ -1594,7 +1579,6 @@ main {
 
 /* Печать */
 @media print {
-  .mockup-banner,
   .site-header,
   .site-footer,
   .nav-toggle,
