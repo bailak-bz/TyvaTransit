@@ -61,7 +61,6 @@
     if (profileForm) {
       profileForm.querySelector('#profile-name').value = user.display_name || '';
       profileForm.querySelector('#profile-phone').value = user.phone || '';
-      profileForm.querySelector('#profile-email').value = user.email || '';
     }
     const data = await TyvaApi.getMyBookings();
     renderList(activeList, data.active, 'Нет активных билетов. Купите билет на общий рейс или закажите личную поездку.');
