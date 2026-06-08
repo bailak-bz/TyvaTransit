@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .api_base import CsrfExemptAPIView
 from .auth_serializers import LoginSerializer, ProfileUpdateSerializer, RegisterSerializer, UserSerializer
 from .models import Booking, UserProfile
 from .serializers import BookingSerializer
@@ -23,7 +24,7 @@ class CsrfView(APIView):
         return Response({'csrfToken': get_token(request)})
 
 
-class RegisterView(APIView):
+class RegisterView(CsrfExemptAPIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
@@ -36,7 +37,7 @@ class RegisterView(APIView):
         return Response(UserSerializer.from_user(user), status=status.HTTP_201_CREATED)
 
 
-class LoginView(APIView):
+class LoginView(CsrfExemptAPIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
@@ -55,7 +56,7 @@ class LoginView(APIView):
         return Response(UserSerializer.from_user(user))
 
 
-class LogoutView(APIView):
+class LogoutView(CsrfExemptAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -63,7 +64,7 @@ class LogoutView(APIView):
         return Response({'detail': 'ok'})
 
 
-class MeView(APIView):
+class MeView(CsrfExemptAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -83,7 +84,7 @@ class MeView(APIView):
         return Response(UserSerializer.from_user(request.user))
 
 
-class MyBookingsView(APIView):
+class MyBookingsView(CsrfExemptAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

@@ -3,11 +3,10 @@ import re
 from django.db import transaction
 from django.db.models import F
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
+from .api_base import CsrfExemptAPIView
 from .models import Booking, Destination, Trip
 from .serializers import (
     BookingLookupSerializer,
@@ -26,13 +25,13 @@ def normalize_phone(phone: str) -> str:
     return re.sub(r'\D', '', phone or '')
 
 
-class DestinationListView(APIView):
+class DestinationListView(CsrfExemptAPIView):
     def get(self, request):
         qs = Destination.objects.filter(is_active=True)
         return Response(DestinationSerializer(qs, many=True).data)
 
 
-class TripListView(APIView):
+class TripListView(CsrfExemptAPIView):
     def get(self, request):
         qs = Trip.objects.filter(is_active=True).select_related('destination')
         destination_param = request.query_params.get('destination') or request.query_params.get('lake')
@@ -52,7 +51,7 @@ class TripListView(APIView):
         return Response(TripSerializer(qs, many=True).data)
 
 
-class TripDetailView(APIView):
+class TripDetailView(CsrfExemptAPIView):
     def get(self, request, trip_id):
         try:
             trip = Trip.objects.select_related('destination').get(pk=trip_id, is_active=True)
@@ -61,8 +60,7 @@ class TripDetailView(APIView):
         return Response(TripSerializer(trip).data)
 
 
-class SharedBookingCreateView(APIView):
-    authentication_classes = [SessionAuthentication]
+class SharedBookingCreateView(CsrfExemptAPIView):
     permission_classes = [AllowAny]
 
     @transaction.atomic
@@ -123,8 +121,7 @@ class SharedBookingCreateView(APIView):
         )
 
 
-class PrivateBookingCreateView(APIView):
-    authentication_classes = [SessionAuthentication]
+class PrivateBookingCreateView(CsrfExemptAPIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -174,7 +171,7 @@ class PrivateBookingCreateView(APIView):
         )
 
 
-class BookingLookupView(APIView):
+class BookingLookupView(CsrfExemptAPIView):
     def get(self, request):
         serializer = BookingLookupSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
