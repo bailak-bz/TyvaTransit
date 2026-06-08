@@ -62,6 +62,7 @@
       profileForm.querySelector('#profile-name').value = user.display_name || '';
       profileForm.querySelector('#profile-phone').value = user.phone || '';
     }
+    if (window.TyvaAuthNav) TyvaAuthNav.update(user);
     const data = await TyvaApi.getMyBookings();
     renderList(activeList, data.active, 'Нет активных билетов. Купите билет на общий рейс или закажите личную поездку.');
     renderList(historyList, data.history, 'История поездок пока пуста.');
@@ -134,6 +135,7 @@
         phone: profileForm.querySelector('#profile-phone').value.trim(),
       });
       if (userTitle) userTitle.textContent = user.display_name || user.email;
+      if (window.TyvaAuthNav) TyvaAuthNav.update(user);
       alert('Профиль сохранён');
     } catch (err) {
       alert(err.message);

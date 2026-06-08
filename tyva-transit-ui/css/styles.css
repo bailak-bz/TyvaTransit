@@ -1200,7 +1200,7 @@ main {
 }
 
 .nav-auth--logged-in {
-  color: var(--lake);
+  color: #fafbff;
 }
 
 .calendar-hint {
