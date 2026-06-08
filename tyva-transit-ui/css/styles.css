@@ -272,11 +272,16 @@ main {
 
 /* Hero */
 .hero {
-  background: linear-gradient(135deg, var(--lake-dark) 0%, var(--lake) 55%, #1a7a82 100%);
+  background:
+    linear-gradient(135deg, rgba(8, 65, 72, 0.78) 0%, rgba(13, 92, 99, 0.55) 55%, rgba(26, 122, 130, 0.45) 100%),
+    url("../images/chagytay-1.jpg") center / cover no-repeat;
   color: var(--white);
   padding: 2.5rem 1.25rem 3rem;
   position: relative;
   overflow: hidden;
+  min-height: clamp(280px, 42vh, 420px);
+  display: flex;
+  align-items: center;
 }
 
 .hero::after {
