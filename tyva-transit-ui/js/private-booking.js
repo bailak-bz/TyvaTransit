@@ -6,6 +6,19 @@
   const submitBtn = form.querySelector('button[type="submit"]');
   let destinations = [];
 
+  function prefillUser(user) {
+    if (!user) return;
+    const nameEl = form.querySelector('#name');
+    const phoneEl = form.querySelector('#phone');
+    const emailEl = form.querySelector('#email');
+    if (nameEl && !nameEl.value) nameEl.value = user.display_name || '';
+    if (phoneEl && !phoneEl.value) phoneEl.value = user.phone || '';
+    if (emailEl && !emailEl.value) emailEl.value = user.email || '';
+  }
+
+  document.addEventListener('tyva:auth', (event) => prefillUser(event.detail.user));
+  TyvaApi.ensureCsrf().then(() => TyvaApi.getMe()).then(prefillUser).catch(() => {});
+
   TyvaApi.getDestinations().then((items) => {
     destinations = items.filter((d) => !d.route_label.startsWith('Чагытай →'));
     routeSelect.innerHTML = '<option value="">Выберите</option>';

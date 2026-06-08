@@ -274,7 +274,7 @@ main {
 .hero {
   background:
     linear-gradient(135deg, rgba(8, 65, 72, 0.78) 0%, rgba(13, 92, 99, 0.55) 55%, rgba(26, 122, 130, 0.45) 100%),
-    url("../images/chagytay-1.jpg") center / cover no-repeat;
+    url("../images/azas-1.jpg") center / cover no-repeat;
   color: var(--white);
   padding: 2.5rem 1.25rem 3rem;
   position: relative;
@@ -1136,6 +1136,71 @@ main {
 .page-tabs a.active {
   background: var(--lake);
   color: var(--white);
+}
+
+.container--narrow {
+  max-width: 480px;
+}
+
+.form-footer-link {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.account-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.account-tabs button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--lake-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.account-tabs button.active {
+  background: var(--lake);
+  color: var(--white);
+}
+
+.booking-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.booking-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+}
+
+.booking-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.info-list--compact li {
+  padding: 0.35rem 0;
+}
+
+.nav-auth--logged-in {
+  color: var(--lake);
 }
 
 .calendar-hint {

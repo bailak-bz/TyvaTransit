@@ -1,6 +1,6 @@
 from django.contrib import admin, messages
 
-from .models import Booking, Destination, Trip
+from .models import Booking, Destination, Trip, UserProfile
 from .services.email_service import send_ticket_email
 
 
@@ -18,14 +18,20 @@ class TripAdmin(admin.ModelAdmin):
     date_hierarchy = 'departure_at'
 
 
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['display_name', 'user', 'phone']
+    search_fields = ['display_name', 'phone', 'user__email']
+
+
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
     list_display = [
-        'code', 'booking_type', 'status', 'customer_name', 'phone',
+        'code', 'booking_type', 'status', 'customer_name', 'phone', 'user',
         'seats', 'total_amount', 'created_at',
     ]
     list_filter = ['booking_type', 'status', 'created_at']
-    search_fields = ['code', 'customer_name', 'phone', 'email']
+    search_fields = ['code', 'customer_name', 'phone', 'email', 'user__email']
     readonly_fields = ['code', 'created_at', 'updated_at', 'email_sent_at']
     actions = ['confirm_private_and_send_email', 'resend_ticket_email']
 

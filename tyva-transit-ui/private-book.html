@@ -19,7 +19,7 @@
       <nav class="nav-main" id="site-nav">
         <a href="trips.html">Общие рейсы</a>
         <a href="private.html" class="active">Личная поездка</a>
-        <a href="check.html">Моя бронь</a>
+        <a href="login.html" data-nav-auth>Войти</a>
         <a href="contacts.html">Контакты</a>
       </nav>
     </div>
@@ -58,7 +58,6 @@
           <div class="form-group">
             <label for="date-out">Дата выезда из Кызыла</label>
             <input type="date" id="date-out" name="date-out" value="2026-06-20" required>
-            <p class="calendar-hint">Серые даты в боевой системе будут заняты — здесь только поле выбора.</p>
           </div>
 
           <div class="form-group">
@@ -168,6 +167,7 @@
   </footer>
   <script src="js/nav.js"></script>
   <script src="js/api.js"></script>
+  <script src="js/auth-nav.js"></script>
   <script src="js/private-booking.js"></script>
 </body>
 </html>

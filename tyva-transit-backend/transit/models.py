@@ -1,6 +1,7 @@
 import random
 import string
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
@@ -94,6 +95,14 @@ class Booking(models.Model):
     total_amount = models.DecimalField('Сумма', max_digits=10, decimal_places=2)
 
     email_sent_at = models.DateTimeField('Билет отправлен', null=True, blank=True)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='bookings',
+        verbose_name='Пользователь',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -117,3 +126,34 @@ class Booking(models.Model):
     @property
     def is_ticket_ready(self) -> bool:
         return self.status in {self.Status.PAID, self.Status.CONFIRMED}
+
+    @property
+    def departure_sort_at(self):
+        if self.trip_id:
+            return self.trip.departure_at
+        if self.departure_date:
+            from datetime import datetime, time
+            return timezone.make_aware(datetime.combine(self.departure_date, time.min))
+        return None
+
+    @property
+    def is_upcoming(self) -> bool:
+        if self.status == self.Status.CANCELLED:
+            return False
+        dep = self.departure_sort_at
+        if dep is None:
+            return self.status in {self.Status.PENDING, self.Status.PAID, self.Status.CONFIRMED}
+        return dep >= timezone.now()
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone = models.CharField('Телефон', max_length=32, blank=True)
+    display_name = models.CharField('Имя', max_length=200, blank=True)
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
+    def __str__(self):
+        return self.display_name or self.user.email or str(self.user_id)

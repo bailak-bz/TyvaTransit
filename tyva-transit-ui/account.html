@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Аккаунт — ТываТранзит</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏔</span>
+        <span class="logo-text">ТываТранзит</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="nav-main" id="site-nav">
+        <a href="trips.html">Общие рейсы</a>
+        <a href="private.html">Личная поездка</a>
+        <a href="destinations.html">Направления</a>
+        <a href="login.html" class="active" data-nav-auth>Войти</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div data-guest-panel hidden>
+        <h1 class="page-title">Личный кабинет</h1>
+        <p class="page-lead">Войдите или зарегистрируйтесь, чтобы видеть билеты. Или найдите билет по номеру без входа.</p>
+        <div class="hero-actions" style="margin-bottom: 2rem;">
+          <a href="login.html" class="btn btn-primary">Войти</a>
+          <a href="register.html" class="btn btn-secondary">Регистрация</a>
+        </div>
+      </div>
+
+      <div data-account-panel hidden>
+        <div class="account-header">
+          <div>
+            <h1 class="page-title" data-user-name>Аккаунт</h1>
+            <p class="page-lead">Активные билеты, история поездок и профиль</p>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" data-logout>Выйти</button>
+        </div>
+      </div>
+
+      <div class="page-tabs account-tabs">
+        <button type="button" class="active" data-account-tab="active">Активные билеты</button>
+        <button type="button" data-account-tab="history">История</button>
+        <button type="button" data-account-tab="lookup" id="lookup">Найти по номеру</button>
+        <button type="button" data-account-tab="profile">Профиль</button>
+      </div>
+
+      <section data-account-panel-id="active">
+        <div class="booking-list" data-active-bookings>
+          <p class="card-meta">Загрузка…</p>
+        </div>
+      </section>
+
+      <section data-account-panel-id="history" hidden>
+        <div class="booking-list" data-history-bookings>
+          <p class="card-meta">Загрузка…</p>
+        </div>
+      </section>
+
+      <section data-account-panel-id="lookup" hidden>
+        <p class="page-lead">Введите номер билета из email и телефон, указанный при бронировании.</p>
+        <div class="form-panel" style="margin-bottom: 1.5rem;">
+          <form id="lookup-form" action="#" method="post">
+            <div class="form-group">
+              <label for="code">Номер билета</label>
+              <input type="text" id="code" placeholder="TYV-T-2026-9152" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Телефон</label>
+              <input type="tel" id="phone" placeholder="+7 …" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Найти</button>
+          </form>
+        </div>
+        <div class="check-result"></div>
+      </section>
+
+      <section data-account-panel-id="profile" hidden>
+        <div class="form-panel">
+          <form id="profile-form" action="#" method="post">
+            <div class="form-group">
+              <label for="profile-name">Имя</label>
+              <input type="text" id="profile-name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="profile-phone">Телефон</label>
+              <input type="tel" id="profile-phone" name="phone" required>
+            </div>
+            <div class="form-group">
+              <label for="profile-email">Email</label>
+              <input type="email" id="profile-email" name="email" readonly>
+              <p class="form-hint">Email изменить нельзя — на него приходят билеты</p>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth-nav.js"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>

@@ -20,22 +20,55 @@
   }
 
   async function request(path, options = {}) {
+    const method = (options.method || 'GET').toUpperCase();
+    const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+    if (method !== 'GET' && method !== 'HEAD') {
+      const csrf = getCookie('csrftoken');
+      if (csrf) headers['X-CSRFToken'] = csrf;
+    }
+
     let response;
     try {
       response = await fetch(`${API_BASE}${path}`, {
-        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+        credentials: 'same-origin',
+        headers,
         ...options,
       });
     } catch (err) {
       showApiHint();
       throw new Error(`Сервер не отвечает (${API_BASE}). Запустите: python manage.py runserver`);
     }
+    if (response.status === 401 || response.status === 403) {
+      const err = new Error('Требуется вход');
+      err.status = response.status;
+      throw err;
+    }
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      const message = data.detail || data.error || 'Ошибка запроса';
+      const message = data.detail || data.error || formatErrors(data) || 'Ошибка запроса';
       throw new Error(typeof message === 'string' ? message : JSON.stringify(message));
     }
     return data;
+  }
+
+  function getCookie(name) {
+    const prefix = `${name}=`;
+    const parts = document.cookie.split(';');
+    for (const part of parts) {
+      const trimmed = part.trim();
+      if (trimmed.startsWith(prefix)) return decodeURIComponent(trimmed.slice(prefix.length));
+    }
+    return '';
+  }
+
+  function formatErrors(data) {
+    if (!data || typeof data !== 'object') return '';
+    const messages = [];
+    Object.entries(data).forEach(([key, value]) => {
+      if (Array.isArray(value)) messages.push(`${key}: ${value.join(', ')}`);
+      else if (typeof value === 'string') messages.push(value);
+    });
+    return messages.join('\n');
   }
 
   global.TyvaApiConfig = { base: API_BASE, backend: BACKEND_URL };
@@ -107,6 +140,20 @@
   global.TyvaTrips = { renderCard: renderTripCard, formatDate: formatTripDate };
 
   global.TyvaApi = {
+    ensureCsrf: () => request('/auth/csrf/'),
+    register: (payload) => request('/auth/register/', { method: 'POST', body: JSON.stringify(payload) }),
+    login: (payload) => request('/auth/login/', { method: 'POST', body: JSON.stringify(payload) }),
+    logout: () => request('/auth/logout/', { method: 'POST', body: '{}' }),
+    getMe: async () => {
+      try {
+        return await request('/auth/me/');
+      } catch (err) {
+        if (err.status === 401 || err.status === 403) return null;
+        throw err;
+      }
+    },
+    updateProfile: (payload) => request('/auth/me/', { method: 'PATCH', body: JSON.stringify(payload) }),
+    getMyBookings: () => request('/auth/bookings/'),
     getDestinations: () => request('/destinations/'),
     getTrips: (params = {}) => {
       const query = new URLSearchParams(params).toString();

@@ -2,74 +2,12 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Мои билеты — ТываТранзит</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta http-equiv="refresh" content="0; url=account.html#lookup">
+  <script>window.location.replace('account.html#lookup');</script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="index.html" class="logo">
-        <span class="logo-icon">🏔</span>
-        <span class="logo-text">ТываТранзит</span>
-      </a>
-      <button type="button" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
-        <span class="nav-toggle-icon" aria-hidden="true"></span>
-      </button>
-      <nav class="nav-main" id="site-nav">
-        <a href="trips.html">Общие рейсы</a>
-        <a href="private.html">Личная поездка</a>
-        <a href="check.html" class="active">Моя бронь</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <div class="container">
-      <h1 class="page-title">Мои билеты</h1>
-      <p class="page-lead">Введите номер билета из Email и телефон, указанный при оплате. Для личной поездки — номер заявки TYV-P-…</p>
-
-      <div class="form-panel" style="margin-bottom: 2rem;">
-        <form action="#" onsubmit="return false;">
-          <div class="form-group">
-            <label for="code">Номер билета</label>
-            <input type="text" id="code" placeholder="TYV-T-2026-9152">
-          </div>
-          <div class="form-group">
-            <label for="phone">Телефон</label>
-            <input type="tel" id="phone" placeholder="+7 …">
-          </div>
-          <button type="button" class="btn btn-primary btn-block">Найти</button>
-        </form>
-      </div>
-
-      <!-- Пример результата поиска (в макете всегда виден) -->
-      <div class="detail-main check-result">
-        <div class="detail-content">
-          <h2 style="margin-top: 0;">Ваш билет</h2>
-          <p><span class="badge badge-ok">Оплачено</span></p>
-          <ul class="info-list">
-            <li><strong>Номер</strong> <span>TYV-T-2026-9152</span></li>
-            <li><strong>Тип</strong> <span>Общий рейс · билет</span></li>
-          <li><strong>Рейс</strong> <span>Кызыл → Чагытай</span></li>
-            <li><strong>Выезд</strong> <span>15 июня 2026, 06:00</span></li>
-            <li><strong>Сбор</strong> <span>ул. Кочетова, 2</span></li>
-            <li><strong>Билетов</strong> <span>2</span></li>
-            <li><strong>Оплачено</strong> <span>3 600 ₽</span></li>
-          </ul>
-          <p class="card-meta">Вопросы по поездке: <a href="tel:+79991234567">+7 (999) 123-45-67</a></p>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div><strong>ИП Ширин-оол Долаана Май-ооловна</strong> г. Кызыл</div>
-    </div>
-  </footer>
-  <script src="js/nav.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/check-booking.js"></script>
+  <p><a href="account.html#lookup">Перейти в личный кабинет</a></p>
 </body>
 </html>
