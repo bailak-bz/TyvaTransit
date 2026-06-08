@@ -13,18 +13,29 @@
   }
 
   const API_BASE = resolveApiBase();
+  let csrfToken = '';
 
   function showApiHint(message) {
     if (global.location.protocol !== 'file:') return;
     alert(message || `Откройте сайт через сервер: ${BACKEND_URL}`);
   }
 
-  async function request(path, options = {}) {
+  async function refreshCsrfToken() {
+    const response = await fetch(`${API_BASE}/auth/csrf/`, { credentials: 'same-origin' });
+    const data = await response.json().catch(() => ({}));
+    csrfToken = data.csrfToken || getCookie('csrftoken') || '';
+    return csrfToken;
+  }
+
+  async function request(path, options = {}, retry = true) {
     const method = (options.method || 'GET').toUpperCase();
     const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
     if (method !== 'GET' && method !== 'HEAD') {
-      const csrf = getCookie('csrftoken');
-      if (csrf) headers['X-CSRFToken'] = csrf;
+      if (!csrfToken && !getCookie('csrftoken')) {
+        await refreshCsrfToken();
+      }
+      const token = csrfToken || getCookie('csrftoken');
+      if (token) headers['X-CSRFToken'] = token;
     }
 
     let response;
@@ -38,15 +49,26 @@
       showApiHint();
       throw new Error(`Сервер не отвечает (${API_BASE}). Запустите: python manage.py runserver`);
     }
-    if (response.status === 401 || response.status === 403) {
-      const err = new Error('Требуется вход');
-      err.status = response.status;
-      throw err;
+
+    const isJson = (response.headers.get('content-type') || '').includes('json');
+    const data = isJson ? await response.json().catch(() => ({})) : {};
+
+    if (response.status === 403 && method !== 'GET' && method !== 'HEAD' && retry) {
+      await refreshCsrfToken();
+      return request(path, options, false);
     }
-    const data = await response.json().catch(() => ({}));
+
     if (!response.ok) {
-      const message = data.detail || data.error || formatErrors(data) || 'Ошибка запроса';
-      throw new Error(typeof message === 'string' ? message : JSON.stringify(message));
+      if (isJson) {
+        const message = data.detail || data.error || formatErrors(data) || 'Ошибка запроса';
+        const err = new Error(typeof message === 'string' ? message : JSON.stringify(message));
+        err.status = response.status;
+        throw err;
+      }
+      if (response.status === 403) {
+        throw new Error('Ошибка CSRF. Обновите страницу и попробуйте снова.');
+      }
+      throw new Error(`Ошибка сервера (${response.status})`);
     }
     return data;
   }
@@ -140,7 +162,7 @@
   global.TyvaTrips = { renderCard: renderTripCard, formatDate: formatTripDate };
 
   global.TyvaApi = {
-    ensureCsrf: () => request('/auth/csrf/'),
+    ensureCsrf: () => refreshCsrfToken(),
     register: (payload) => request('/auth/register/', { method: 'POST', body: JSON.stringify(payload) }),
     login: (payload) => request('/auth/login/', { method: 'POST', body: JSON.stringify(payload) }),
     logout: () => request('/auth/logout/', { method: 'POST', body: '{}' }),

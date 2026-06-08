@@ -17,6 +17,7 @@
     const btn = form.querySelector('button[type="submit"]');
     btn.disabled = true;
     try {
+      await TyvaApi.ensureCsrf();
       await TyvaApi.register({
         email: form.querySelector('#email').value.trim(),
         password,
