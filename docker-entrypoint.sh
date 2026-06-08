@@ -34,7 +34,10 @@ until python manage.py migrate --noinput; do
   sleep 3
 done
 
-echo "Migrations OK. Starting gunicorn on 0.0.0.0:${PORT:-8000}..."
+echo "Migrations OK. Collecting static files..."
+python manage.py collectstatic --noinput
+
+echo "Starting gunicorn on 0.0.0.0:${PORT:-8000}..."
 exec gunicorn config.wsgi:application \
   --bind "0.0.0.0:${PORT:-8000}" \
   --workers 2 \

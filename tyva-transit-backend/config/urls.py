@@ -7,6 +7,8 @@ from django.views.static import serve
 admin.site.site_header = 'ТываТранзит — админка'
 admin.site.site_title = 'ТываТранзит'
 
+ASSET_VERSION = '3'
+
 
 def health_check(request):
     return JsonResponse({'status': 'ok'})
@@ -22,7 +24,16 @@ def serve_frontend_page(request, page='index'):
     filepath = settings.FRONTEND_DIR / filename
     if not filepath.exists():
         raise Http404
-    return FileResponse(open(filepath, 'rb'), content_type='text/html; charset=utf-8')
+    response = FileResponse(open(filepath, 'rb'), content_type='text/html; charset=utf-8')
+    response['Cache-Control'] = 'no-cache, must-revalidate'
+    return response
+
+
+def serve_frontend_asset(request, path, document_root):
+    response = serve(request, path, document_root=document_root)
+    if path.endswith('.js') or path.endswith('.css'):
+        response['Cache-Control'] = 'no-cache, must-revalidate'
+    return response
 
 
 urlpatterns = [
@@ -35,7 +46,19 @@ urlpatterns = [
 
 if settings.FRONTEND_DIR.exists():
     urlpatterns += [
-        re_path(r'^css/(?P<path>.*)$', serve, {'document_root': settings.FRONTEND_DIR / 'css'}),
-        re_path(r'^js/(?P<path>.*)$', serve, {'document_root': settings.FRONTEND_DIR / 'js'}),
-        re_path(r'^images/(?P<path>.*)$', serve, {'document_root': settings.FRONTEND_DIR / 'images'}),
+        re_path(
+            r'^css/(?P<path>.*)$',
+            serve_frontend_asset,
+            {'document_root': settings.FRONTEND_DIR / 'css'},
+        ),
+        re_path(
+            r'^js/(?P<path>.*)$',
+            serve_frontend_asset,
+            {'document_root': settings.FRONTEND_DIR / 'js'},
+        ),
+        re_path(
+            r'^images/(?P<path>.*)$',
+            serve_frontend_asset,
+            {'document_root': settings.FRONTEND_DIR / 'images'},
+        ),
     ]

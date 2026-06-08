@@ -6,8 +6,8 @@
   form.addEventListener('submit', (event) => event.preventDefault());
 
   btn.addEventListener('click', async () => {
-    if (!window.TyvaApi) {
-      alert('Не загрузился API. Обновите страницу (Ctrl+F5).');
+    if (!window.TyvaApi || typeof TyvaApi.login !== 'function') {
+      alert('Сайт не обновился. Нажмите Ctrl+F5 (жёсткое обновление страницы) и попробуйте снова.');
       return;
     }
 
