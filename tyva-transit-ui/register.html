@@ -32,7 +32,7 @@
       <p class="page-lead">Создайте аккаунт — билеты будут сохраняться в личном кабинете.</p>
 
       <div class="form-panel">
-        <form id="register-form" action="#" method="post" onsubmit="return false;">
+        <form id="register-form" action="#" novalidate>
           <div class="form-group">
             <label for="name">Имя</label>
             <input type="text" id="name" name="name" required autocomplete="name">
@@ -54,7 +54,7 @@
             <label for="password2">Повторите пароль</label>
             <input type="password" id="password2" name="password2" minlength="8" required autocomplete="new-password">
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+          <button type="button" id="register-btn" class="btn btn-primary btn-block">Зарегистрироваться</button>
         </form>
         <p class="form-footer-link">Уже есть аккаунт? <a href="login.html">Войти</a></p>
       </div>

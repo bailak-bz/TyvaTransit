@@ -1,23 +1,25 @@
 (function () {
   const form = document.querySelector('#register-form');
-  if (!form) return;
+  const btn = document.querySelector('#register-btn');
+  if (!form || !btn) return;
 
-  TyvaApi.ensureCsrf().then(() => TyvaApi.getMe()).then((user) => {
-    if (user) window.location.replace('account.html');
-  });
+  form.addEventListener('submit', (event) => event.preventDefault());
 
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
+  btn.addEventListener('click', async () => {
+    if (!window.TyvaApi) {
+      alert('Не загрузился API. Обновите страницу (Ctrl+F5).');
+      return;
+    }
+
     const password = form.querySelector('#password').value;
     const password2 = form.querySelector('#password2').value;
     if (password !== password2) {
       alert('Пароли не совпадают');
       return;
     }
-    const btn = form.querySelector('button[type="submit"]');
+
     btn.disabled = true;
     try {
-      await TyvaApi.ensureCsrf();
       await TyvaApi.register({
         email: form.querySelector('#email').value.trim(),
         password,
@@ -26,8 +28,14 @@
       });
       window.location.href = 'account.html';
     } catch (err) {
-      alert(err.message);
+      alert(err.message || 'Ошибка регистрации');
       btn.disabled = false;
     }
   });
+
+  if (window.TyvaApi) {
+    TyvaApi.getMe().then((user) => {
+      if (user) window.location.replace('account.html');
+    }).catch(() => {});
+  }
 })();

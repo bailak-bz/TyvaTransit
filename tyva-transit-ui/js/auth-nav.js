@@ -16,7 +16,6 @@
   async function init() {
     if (!window.TyvaApi) return;
     try {
-      await TyvaApi.ensureCsrf();
       const user = await TyvaApi.getMe();
       updateAuthLinks(user);
       window.TyvaCurrentUser = user;

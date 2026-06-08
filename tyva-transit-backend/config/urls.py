@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
-from django.http import FileResponse, Http404, JsonResponse
+from django.http import FileResponse, Http404, HttpResponseNotAllowed, JsonResponse
 from django.urls import include, path, re_path
 from django.views.static import serve
 
@@ -13,6 +13,8 @@ def health_check(request):
 
 
 def serve_frontend_page(request, page='index'):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
     if page == 'index':
         filename = 'index.html'
     else:
