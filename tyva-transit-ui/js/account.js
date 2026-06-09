@@ -92,15 +92,16 @@
   function rememberBookings(data) {
     bookingsById = {};
     [...data.active, ...data.history].forEach((booking) => {
-      bookingsById[booking.id] = booking;
+      bookingsById[String(booking.id)] = booking;
     });
   }
 
   function openPaymentModal(bookingId) {
-    const booking = bookingsById[bookingId];
+    const id = String(bookingId);
+    const booking = bookingsById[id] || bookingsById[Number(id)];
     if (!booking || !paymentModal) return;
 
-    currentPaymentBookingId = bookingId;
+    currentPaymentBookingId = booking.id;
     const displayNumber = booking.public_number || booking.code;
 
     paymentModal.querySelector('[data-modal-route]').textContent =
@@ -110,12 +111,14 @@
 
     const detailsWrap = paymentModal.querySelector('[data-modal-details]');
     const detailsText = paymentModal.querySelector('[data-modal-details-text]');
-    if (booking.payment_details) {
-      detailsText.innerHTML = booking.payment_details.replace(/\n/g, '<br>');
-      detailsWrap.hidden = false;
-    } else {
-      detailsText.textContent = '';
-      detailsWrap.hidden = true;
+    if (detailsWrap && detailsText) {
+      if (booking.payment_details) {
+        detailsText.innerHTML = booking.payment_details.replace(/\n/g, '<br>');
+        detailsWrap.hidden = false;
+      } else {
+        detailsText.textContent = '';
+        detailsWrap.hidden = true;
+      }
     }
 
     const sbpRadio = paymentModal.querySelector('input[name="modal-pay"][value="sbp"]');
@@ -141,6 +144,10 @@
   function initPaymentModal() {
     if (!paymentModal) return;
 
+    paymentModal.querySelector('.modal')?.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
+
     paymentModal.addEventListener('click', (event) => {
       if (event.target === paymentModal) closePaymentModal();
     });
@@ -154,7 +161,10 @@
     });
 
     paymentModal.querySelector('[data-modal-pay]')?.addEventListener('click', async () => {
-      if (!currentPaymentBookingId || !window.TyvaApi) return;
+      if (!currentPaymentBookingId || !window.TyvaApi || typeof TyvaApi.payPrivateBooking !== 'function') {
+        alert('Сайт не обновился. Нажмите Ctrl+F5 и попробуйте снова.');
+        return;
+      }
 
       const paymentMethod = paymentModal.querySelector('input[name="modal-pay"]:checked')?.value || 'sbp';
       const payBtn = paymentModal.querySelector('[data-modal-pay]');
@@ -181,6 +191,7 @@
     container.addEventListener('click', (event) => {
       const openBtn = event.target.closest('[data-open-payment]');
       if (openBtn) {
+        event.preventDefault();
         openPaymentModal(openBtn.getAttribute('data-open-payment'));
       }
     });
@@ -261,5 +272,9 @@
     }
   });
 
-  document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
