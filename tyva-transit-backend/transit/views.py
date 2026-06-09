@@ -17,7 +17,7 @@ from .serializers import (
     TripSerializer,
     estimate_private_amount,
 )
-from .services.email_service import send_ticket_email
+from .services.email_service import send_application_email, send_ticket_email
 from .services.payment import process_stub_payment
 
 
@@ -156,7 +156,7 @@ class PrivateBookingCreateView(CsrfExemptAPIView):
         email_sent = False
         email_error = ''
         try:
-            send_ticket_email(booking)
+            send_application_email(booking)
             email_sent = True
         except Exception as exc:
             email_error = str(exc)
@@ -178,9 +178,18 @@ class BookingLookupView(CsrfExemptAPIView):
         code = serializer.validated_data['code'].strip().upper()
         phone = normalize_phone(serializer.validated_data['phone'])
 
-        try:
-            booking = Booking.objects.select_related('destination', 'trip').get(code__iexact=code)
-        except Booking.DoesNotExist:
+        booking = (
+            Booking.objects.select_related('destination', 'trip')
+            .filter(code__iexact=code)
+            .first()
+        )
+        if booking is None:
+            booking = (
+                Booking.objects.select_related('destination', 'trip')
+                .filter(application_code__iexact=code)
+                .first()
+            )
+        if booking is None:
             return Response({'detail': 'Билет не найден'}, status=status.HTTP_404_NOT_FOUND)
 
         if normalize_phone(booking.phone) != phone:

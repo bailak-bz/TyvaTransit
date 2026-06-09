@@ -12,6 +12,8 @@ from .api_base import CsrfExemptAPIView
 from .auth_serializers import LoginSerializer, ProfileUpdateSerializer, RegisterSerializer, UserSerializer
 from .models import Booking, UserProfile
 from .serializers import BookingSerializer
+from .services.email_service import send_ticket_email
+from .services.payment import process_stub_payment
 from .services.user_service import link_bookings_to_user
 
 
@@ -103,3 +105,38 @@ class MyBookingsView(CsrfExemptAPIView):
             else:
                 history.append(data)
         return Response({'active': active, 'history': history})
+
+
+class PayPrivateBookingView(CsrfExemptAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, booking_id):
+        try:
+            booking = Booking.objects.select_related('destination', 'trip').get(
+                pk=booking_id,
+                user=request.user,
+            )
+        except Booking.DoesNotExist:
+            return Response({'detail': 'Бронь не найдена'}, status=status.HTTP_404_NOT_FOUND)
+
+        if not booking.needs_payment:
+            return Response({'detail': 'Оплата для этой брони недоступна'}, status=status.HTTP_400_BAD_REQUEST)
+
+        payment = process_stub_payment(booking)
+        booking.status = Booking.Status.PAID
+        booking.save(update_fields=['status'])
+
+        email_sent = False
+        email_error = ''
+        try:
+            send_ticket_email(booking)
+            email_sent = True
+        except Exception as exc:
+            email_error = str(exc)
+
+        return Response({
+            'booking': BookingSerializer(booking).data,
+            'payment': payment,
+            'email_sent': email_sent,
+            'email_error': email_error,
+        })

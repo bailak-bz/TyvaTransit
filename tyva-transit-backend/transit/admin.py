@@ -1,7 +1,7 @@
 from django.contrib import admin, messages
 
-from .models import Booking, Destination, Trip, UserProfile
-from .services.email_service import send_ticket_email
+from .models import BookingRecord, Destination, PrivateApplication, Trip, UserProfile
+from .services.email_service import send_payment_details_email, send_ticket_email
 
 
 @admin.register(Destination)
@@ -24,31 +24,88 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ['display_name', 'phone', 'user__email']
 
 
-@admin.register(Booking)
-class BookingAdmin(admin.ModelAdmin):
+@admin.register(PrivateApplication)
+class PrivateApplicationAdmin(admin.ModelAdmin):
+    list_display = [
+        'application_code', 'customer_name', 'phone', 'user', 'destination',
+        'departure_date', 'seats', 'total_amount', 'created_at',
+    ]
+    list_filter = ['created_at', 'destination']
+    search_fields = ['application_code', 'customer_name', 'phone', 'email', 'user__email']
+    readonly_fields = ['application_code', 'created_at', 'updated_at', 'email_sent_at']
+    actions = ['accept_application']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(
+            booking_type=PrivateApplication.BookingType.PRIVATE,
+            status=PrivateApplication.Status.PENDING,
+            code__isnull=True,
+        ).select_related('destination', 'user')
+
+    def has_add_permission(self, request):
+        return False
+
+    @admin.action(description='Принять заявку и создать бронь')
+    def accept_application(self, request, queryset):
+        count = 0
+        for application in queryset:
+            if not application.confirm_as_booking():
+                continue
+            try:
+                send_payment_details_email(application)
+            except Exception as exc:
+                self.message_user(
+                    request,
+                    f'Бронь {application.code} создана, но письмо не отправлено: {exc}',
+                    messages.WARNING,
+                )
+            count += 1
+        self.message_user(request, f'Принято заявок: {count}', messages.SUCCESS)
+
+
+@admin.register(BookingRecord)
+class BookingRecordAdmin(admin.ModelAdmin):
     list_display = [
         'code', 'booking_type', 'status', 'customer_name', 'phone', 'user',
         'seats', 'total_amount', 'created_at',
     ]
     list_filter = ['booking_type', 'status', 'created_at']
-    search_fields = ['code', 'customer_name', 'phone', 'email', 'user__email']
-    readonly_fields = ['code', 'created_at', 'updated_at', 'email_sent_at']
-    actions = ['confirm_private_and_send_email', 'resend_ticket_email']
+    search_fields = ['code', 'application_code', 'customer_name', 'phone', 'email', 'user__email']
+    readonly_fields = ['code', 'application_code', 'created_at', 'updated_at', 'email_sent_at']
+    actions = ['mark_paid_and_send_ticket', 'resend_ticket_email']
 
-    @admin.action(description='Подтвердить личную поездку и отправить билет')
-    def confirm_private_and_send_email(self, request, queryset):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.exclude(
+            booking_type=BookingRecord.BookingType.PRIVATE,
+            status=BookingRecord.Status.PENDING,
+            code__isnull=True,
+        ).select_related('destination', 'trip', 'user')
+
+    @admin.action(description='Отметить оплаченным и отправить билет')
+    def mark_paid_and_send_ticket(self, request, queryset):
         count = 0
-        for booking in queryset.filter(booking_type=Booking.BookingType.PRIVATE):
-            booking.status = Booking.Status.CONFIRMED
+        for booking in queryset:
+            booking.status = BookingRecord.Status.PAID
             booking.save(update_fields=['status'])
-            send_ticket_email(booking)
+            try:
+                send_ticket_email(booking)
+            except Exception as exc:
+                self.message_user(request, f'{booking.code}: {exc}', messages.WARNING)
             count += 1
-        self.message_user(request, f'Подтверждено и отправлено: {count}', messages.SUCCESS)
+        self.message_user(request, f'Обработано: {count}', messages.SUCCESS)
 
-    @admin.action(description='Повторно отправить билет на email')
+    @admin.action(description='Повторно отправить письмо')
     def resend_ticket_email(self, request, queryset):
         count = 0
         for booking in queryset:
-            send_ticket_email(booking)
-            count += 1
+            try:
+                if booking.needs_payment:
+                    send_payment_details_email(booking)
+                else:
+                    send_ticket_email(booking)
+                count += 1
+            except Exception as exc:
+                self.message_user(request, f'{booking.public_number}: {exc}', messages.WARNING)
         self.message_user(request, f'Отправлено писем: {count}', messages.SUCCESS)

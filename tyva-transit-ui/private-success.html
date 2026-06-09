@@ -30,28 +30,26 @@
         <span class="badge badge-private">Личная поездка</span>
         <h1 class="page-title" style="margin-top: 0.75rem;">Заявка отправлена</h1>
         <p class="page-lead" style="margin: 0 auto 1rem;">
-          Перевозчик проверит свободную машину на выбранную дату. После подтверждения поездка будет <strong>закрыта для посторонних</strong>.
+          Перевозчик проверит свободную машину на выбранную дату.
         </p>
 
         <p style="margin: 0; font-size: 0.9rem; color: var(--muted);">Номер заявки</p>
-        <div class="booking-code">TYV-P-2026-1203</div>
+        <div class="booking-code" data-application-code>—</div>
 
-        <ul class="info-list" style="text-align: left; margin: 1.5rem 0;">
-          <li><strong>Тип</strong> <span>Личная поездка (вся машина)</span></li>
-          <li><strong>Маршрут</strong> <span>Кызыл → Чагытай</span></li>
-          <li><strong>Туда</strong> <span>20 июня 2026, ~06:00</span></li>
-          <li><strong>Обратно</strong> <span>22 июня 2026</span></li>
-          <li><strong>Группа</strong> <span>6 человек · микроавтобус</span></li>
-          <li><strong>Ориентир цены</strong> <span>36 000 ₽</span></li>
-          <li><strong>Статус</strong> <span><span class="badge badge-low">Ожидает подтверждения</span></span></li>
+        <ul class="info-list" style="text-align: left; margin: 1.5rem 0;" data-success-info>
+          <li><strong>Маршрут</strong> <span>—</span></li>
+          <li><strong>Выезд</strong> <span>—</span></li>
+          <li><strong>Сумма</strong> <span>—</span></li>
+          <li><strong>Статус</strong> <span><span class="badge badge-private">Ожидает подтверждения</span></span></li>
         </ul>
 
-        <p style="font-size: 0.9rem; color: var(--muted);">
-          В личном кабинете тот же номер покажет статус. Общий рейс на эту дату для других клиентов не создаётся — только ваш заказ.
+        <p class="success-note" data-success-note style="font-size: 0.9rem; color: var(--muted);">
+          После подтверждения заявки реквизиты для оплаты придут на email
+          или появятся в личном кабинете в разделе «Активные билеты».
         </p>
 
         <div class="success-actions">
-          <a href="account.html#lookup" class="btn btn-secondary">Проверить заявку</a>
+          <a href="account.html" class="btn btn-secondary">Активные билеты</a>
           <a href="private.html" class="btn btn-primary">Личные поездки</a>
         </div>
       </div>
@@ -66,6 +64,6 @@
   <script src="js/nav.js?v=5"></script>
   <script src="js/api.js?v=5"></script>
   <script src="js/auth-nav.js?v=5"></script>
-  <script src="js/success-display.js?v=5"></script>
+  <script src="js/private-success.js?v=1"></script>
 </body>
 </html>

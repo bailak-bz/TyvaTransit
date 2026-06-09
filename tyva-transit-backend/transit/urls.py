@@ -15,4 +15,5 @@ urlpatterns = [
     path('auth/logout/', auth_views.LogoutView.as_view(), name='auth-logout'),
     path('auth/me/', auth_views.MeView.as_view(), name='auth-me'),
     path('auth/bookings/', auth_views.MyBookingsView.as_view(), name='auth-bookings'),
+    path('auth/bookings/<int:booking_id>/pay/', auth_views.PayPrivateBookingView.as_view(), name='auth-booking-pay'),
 ]

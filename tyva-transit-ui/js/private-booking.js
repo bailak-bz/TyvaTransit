@@ -213,7 +213,8 @@
       } else {
         sessionStorage.removeItem('tyva_email_error');
       }
-      window.location.href = `private-success.html?code=${encodeURIComponent(result.booking.code)}`;
+      const appCode = result.booking.application_code || result.booking.public_number || result.booking.code;
+      window.location.href = `private-success.html?code=${encodeURIComponent(appCode)}`;
     } catch (err) {
       alert(err.message || 'Не удалось отправить заявку');
       submitBtn.disabled = false;

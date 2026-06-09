@@ -173,6 +173,16 @@ EMAIL_SMTP_READY = _smtp_configured()
 
 PAYMENT_STUB_ENABLED = True
 
+PAYMENT_DETAILS = os.getenv(
+    'PAYMENT_DETAILS',
+    '\n'.join([
+        'Получатель: ИП Ширин-оол Долаана Май-ооловна',
+        'ИНН: уточняйте у перевозчика',
+        'СБП / перевод: уточняйте у перевозчика',
+        'В комментарии к платежу укажите номер брони.',
+    ]),
+)
+
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True

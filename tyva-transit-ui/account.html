@@ -30,6 +30,8 @@
     <div class="container">
       <div data-guest-panel hidden>
         <h1 class="page-title">Личный кабинет</h1>
+        <p class="page-lead">Войдите, чтобы видеть активные билеты и историю поездок.</p>
+        <a href="login.html" class="btn btn-primary">Войти</a>
       </div>
 
       <div data-account-panel hidden>
@@ -45,7 +47,6 @@
       <div class="page-tabs account-tabs">
         <button type="button" class="active" data-account-tab="active">Активные билеты</button>
         <button type="button" data-account-tab="history">История</button>
-        <button type="button" data-account-tab="lookup" id="lookup">Найти по номеру</button>
         <button type="button" data-account-tab="profile">Профиль</button>
       </div>
 
@@ -59,24 +60,6 @@
         <div class="booking-list" data-history-bookings>
           <p class="card-meta">Загрузка…</p>
         </div>
-      </section>
-
-      <section data-account-panel-id="lookup" hidden>
-        <p class="page-lead">Введите номер билета из email и телефон, указанный при бронировании.</p>
-        <div class="form-panel" style="margin-bottom: 1.5rem;">
-          <form id="lookup-form" action="#" method="post">
-            <div class="form-group">
-              <label for="code">Номер билета</label>
-              <input type="text" id="code" placeholder="TYV-T-2026-9152" required>
-            </div>
-            <div class="form-group">
-              <label for="phone">Телефон</label>
-              <input type="tel" id="phone" placeholder="+7 …" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Найти</button>
-          </form>
-        </div>
-        <div class="check-result"></div>
       </section>
 
       <section data-account-panel-id="profile" hidden>
@@ -105,6 +88,6 @@
   <script src="js/nav.js?v=5"></script>
   <script src="js/api.js?v=5"></script>
   <script src="js/auth-nav.js?v=5"></script>
-  <script src="js/account.js?v=5"></script>
+  <script src="js/account.js?v=6"></script>
 </body>
 </html>

@@ -13,6 +13,12 @@ def generate_booking_code(booking_type: str) -> str:
     return f'{prefix}-{year}-{suffix}'
 
 
+def generate_application_code() -> str:
+    year = timezone.now().year
+    suffix = ''.join(random.choices(string.digits, k=4))
+    return f'ZAY-{year}-{suffix}'
+
+
 class Destination(models.Model):
     name = models.CharField('Название', max_length=200)
     slug = models.SlugField('Код', unique=True)
@@ -72,7 +78,8 @@ class Booking(models.Model):
         MINIVAN_8 = 'minivan_8', 'Минивэн до 8 мест'
         BUS_12 = 'bus_12', 'Микроавтобус до 12 мест'
 
-    code = models.CharField('Номер', max_length=32, unique=True)
+    application_code = models.CharField('Номер заявки', max_length=32, unique=True, null=True, blank=True)
+    code = models.CharField('Номер брони', max_length=32, unique=True, null=True, blank=True)
     booking_type = models.CharField('Тип', max_length=10, choices=BookingType.choices)
     status = models.CharField('Статус', max_length=12, choices=Status.choices, default=Status.PENDING)
 
@@ -112,10 +119,21 @@ class Booking(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f'{self.code} · {self.customer_name}'
+        return f'{self.public_number} · {self.customer_name}'
 
     def save(self, *args, **kwargs):
-        if not self.code:
+        is_private_application = (
+            self.booking_type == self.BookingType.PRIVATE
+            and self.status == self.Status.PENDING
+            and not self.code
+        )
+        if is_private_application and not self.application_code:
+            for _ in range(10):
+                application_code = generate_application_code()
+                if not Booking.objects.filter(application_code=application_code).exists():
+                    self.application_code = application_code
+                    break
+        elif not self.code:
             for _ in range(10):
                 code = generate_booking_code(self.booking_type)
                 if not Booking.objects.filter(code=code).exists():
@@ -124,7 +142,45 @@ class Booking(models.Model):
         super().save(*args, **kwargs)
 
     @property
+    def is_application(self) -> bool:
+        return (
+            self.booking_type == self.BookingType.PRIVATE
+            and self.status == self.Status.PENDING
+            and not self.code
+        )
+
+    @property
+    def public_number(self) -> str:
+        if self.is_application:
+            return self.application_code or ''
+        return self.code or ''
+
+    @property
+    def needs_payment(self) -> bool:
+        return (
+            self.booking_type == self.BookingType.PRIVATE
+            and self.status == self.Status.CONFIRMED
+            and bool(self.code)
+        )
+
+    def confirm_as_booking(self) -> bool:
+        if not self.is_application:
+            return False
+        for _ in range(10):
+            code = generate_booking_code(self.booking_type)
+            if not Booking.objects.filter(code=code).exists():
+                self.code = code
+                break
+        if not self.code:
+            return False
+        self.status = self.Status.CONFIRMED
+        self.save()
+        return True
+
+    @property
     def is_ticket_ready(self) -> bool:
+        if self.booking_type == self.BookingType.PRIVATE:
+            return self.status == self.Status.PAID
         return self.status in {self.Status.PAID, self.Status.CONFIRMED}
 
     @property
@@ -157,3 +213,17 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.display_name or self.user.email or str(self.user_id)
+
+
+class PrivateApplication(Booking):
+    class Meta:
+        proxy = True
+        verbose_name = 'Заявка'
+        verbose_name_plural = 'Заявки'
+
+
+class BookingRecord(Booking):
+    class Meta:
+        proxy = True
+        verbose_name = 'Бронь'
+        verbose_name_plural = 'Брони'

@@ -14,9 +14,23 @@
     });
   }
 
+  function numberLabel(booking) {
+    if (booking.is_application) return 'Заявка';
+    return 'Бронь';
+  }
+
   function statusBadge(booking) {
-    if (booking.status === 'paid' || booking.status === 'confirmed') {
+    if (booking.is_application) {
+      return '<span class="badge badge-private">Ожидает подтверждения</span>';
+    }
+    if (booking.needs_payment) {
+      return '<span class="badge badge-low">Подтверждено</span>';
+    }
+    if (booking.status === 'paid') {
       return '<span class="badge badge-ok">Оплачено</span>';
+    }
+    if (booking.status === 'confirmed') {
+      return '<span class="badge badge-ok">Подтверждено</span>';
     }
     if (booking.status === 'pending') {
       return '<span class="badge badge-private">Ожидает</span>';
@@ -27,15 +41,41 @@
     return `<span class="badge">${booking.status_display}</span>`;
   }
 
+  function renderPaymentBlock(booking) {
+    if (!booking.needs_payment) return '';
+    const details = (booking.payment_details || '').replace(/\n/g, '<br>');
+    return `
+      <div class="payment-panel" hidden data-payment-panel="${booking.id}">
+        <p class="card-meta" style="margin-top: 0.75rem;"><strong>Реквизиты для оплаты</strong></p>
+        <p class="card-meta">${details}</p>
+        ${booking.payment_stub?.enabled ? `
+          <button type="button" class="btn btn-primary btn-sm" data-confirm-pay="${booking.id}">
+            Подтвердить оплату (демо)
+          </button>
+        ` : ''}
+      </div>`;
+  }
+
   function renderBookingCard(booking) {
     const departure = booking.departure_at
       ? formatDate(booking.departure_at)
       : [booking.departure_date, booking.departure_time].filter(Boolean).join(', ');
+    const displayNumber = booking.public_number || booking.application_code || booking.code;
+    const paymentBtn = booking.needs_payment
+      ? `<button type="button" class="btn btn-primary btn-sm" data-show-payment="${booking.id}">Оплата</button>`
+      : '';
+
     return `
-      <article class="booking-card">
+      <article class="booking-card" data-booking-id="${booking.id}">
         <div class="booking-card__head">
-          <strong>${booking.code}</strong>
-          ${statusBadge(booking)}
+          <div>
+            <span class="card-meta">${numberLabel(booking)}</span>
+            <strong>${displayNumber}</strong>
+          </div>
+          <div class="booking-card__actions">
+            ${statusBadge(booking)}
+            ${paymentBtn}
+          </div>
         </div>
         <p class="card-meta">${booking.booking_type_display} · ${booking.route_label}</p>
         <ul class="info-list info-list--compact">
@@ -44,6 +84,7 @@
           <li><strong>Мест</strong> <span>${booking.seats}</span></li>
           <li><strong>Сумма</strong> <span>${Number(booking.total_amount).toLocaleString('ru-RU')} ₽</span></li>
         </ul>
+        ${renderPaymentBlock(booking)}
       </article>`;
   }
 
@@ -54,6 +95,34 @@
       return;
     }
     container.innerHTML = items.map(renderBookingCard).join('');
+  }
+
+  function bindBookingActions(container) {
+    if (!container) return;
+    container.addEventListener('click', async (event) => {
+      const showBtn = event.target.closest('[data-show-payment]');
+      if (showBtn) {
+        const id = showBtn.getAttribute('data-show-payment');
+        const panel = container.querySelector(`[data-payment-panel="${id}"]`);
+        if (panel) panel.hidden = !panel.hidden;
+        return;
+      }
+
+      const payBtn = event.target.closest('[data-confirm-pay]');
+      if (!payBtn || !window.TyvaApi) return;
+
+      const id = payBtn.getAttribute('data-confirm-pay');
+      payBtn.disabled = true;
+      try {
+        await TyvaApi.payPrivateBooking(id);
+        const user = await TyvaApi.getMe();
+        if (user) await loadAccount(user);
+        alert('Оплата принята. Билет отправлен на email.');
+      } catch (err) {
+        alert(err.message || 'Не удалось провести оплату');
+        payBtn.disabled = false;
+      }
+    });
   }
 
   async function loadAccount(user) {
@@ -82,33 +151,9 @@
     });
   }
 
-  function initLookup() {
-    const form = document.querySelector('#lookup-form');
-    const resultBox = document.querySelector('.check-result');
-    if (!form || !resultBox) return;
-    resultBox.style.display = 'none';
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      try {
-        const booking = await TyvaApi.lookupBooking(
-          form.querySelector('#code').value.trim(),
-          form.querySelector('#phone').value.trim(),
-        );
-        resultBox.innerHTML = renderBookingCard(booking);
-        resultBox.style.display = '';
-      } catch (err) {
-        alert(err.message);
-        resultBox.style.display = 'none';
-      }
-    });
-  }
-
   async function init() {
     initTabs();
-    initLookup();
-    if (window.location.hash === '#lookup') {
-      document.querySelector('[data-account-tab="lookup"]')?.click();
-    }
+    bindBookingActions(activeList);
     try {
       await TyvaApi.ensureCsrf();
       const user = await TyvaApi.getMe();

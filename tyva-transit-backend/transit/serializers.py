@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.conf import settings
 from rest_framework import serializers
 
 from .models import Booking, Destination, Trip
@@ -61,20 +62,40 @@ class BookingSerializer(serializers.ModelSerializer):
     departure_at = serializers.DateTimeField(source='trip.departure_at', read_only=True, allow_null=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     booking_type_display = serializers.CharField(source='get_booking_type_display', read_only=True)
+    public_number = serializers.SerializerMethodField()
+    is_application = serializers.SerializerMethodField()
+    needs_payment = serializers.SerializerMethodField()
+    payment_details = serializers.SerializerMethodField()
     payment_stub = serializers.SerializerMethodField()
 
     class Meta:
         model = Booking
         fields = [
-            'id', 'code', 'booking_type', 'booking_type_display', 'status', 'status_display',
+            'id', 'application_code', 'code', 'public_number', 'is_application', 'needs_payment',
+            'booking_type', 'booking_type_display', 'status', 'status_display',
             'route_label', 'meeting_point', 'departure_at', 'departure_date', 'departure_time',
             'return_date', 'round_trip', 'vehicle_type', 'customer_name', 'phone', 'email',
-            'seats', 'total_amount', 'payment_method', 'payment_stub', 'comment', 'created_at',
+            'seats', 'total_amount', 'payment_method', 'payment_details', 'payment_stub',
+            'comment', 'created_at',
         ]
+
+    def get_public_number(self, obj):
+        return obj.public_number
+
+    def get_is_application(self, obj):
+        return obj.is_application
+
+    def get_needs_payment(self, obj):
+        return obj.needs_payment
+
+    def get_payment_details(self, obj):
+        if not obj.needs_payment:
+            return None
+        return settings.PAYMENT_DETAILS.strip()
 
     def get_payment_stub(self, obj):
         return {
-            'enabled': True,
+            'enabled': settings.PAYMENT_STUB_ENABLED and obj.needs_payment,
             'note': 'Демо-оплата: деньги не списываются',
         }
 
