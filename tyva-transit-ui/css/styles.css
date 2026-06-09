@@ -1208,6 +1208,65 @@ main {
   border-top: 1px solid var(--border, #e8e4df);
 }
 
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(26, 22, 18, 0.55);
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.modal-title {
+  margin: 0 2rem 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.modal-amount {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.modal-details {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--bg, #f7f4ef);
+  border-radius: calc(var(--radius) - 4px);
+}
+
 .info-list--compact li {
   padding: 0.35rem 0;
 }

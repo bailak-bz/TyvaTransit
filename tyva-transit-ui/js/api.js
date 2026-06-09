@@ -176,7 +176,10 @@
     },
     updateProfile: (payload) => request('/auth/me/', { method: 'PATCH', body: JSON.stringify(payload) }),
     getMyBookings: () => request('/auth/bookings/'),
-    payPrivateBooking: (bookingId) => request(`/auth/bookings/${bookingId}/pay/`, { method: 'POST' }),
+    payPrivateBooking: (bookingId, paymentMethod) => request(`/auth/bookings/${bookingId}/pay/`, {
+      method: 'POST',
+      body: JSON.stringify({ payment_method: paymentMethod }),
+    }),
     getDestinations: () => request('/destinations/'),
     getTrips: (params = {}) => {
       const query = new URLSearchParams(params).toString();

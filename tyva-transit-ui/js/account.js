@@ -6,12 +6,20 @@
   const accountPanel = document.querySelector('[data-account-panel]');
   const userTitle = document.querySelector('[data-user-name]');
   const logoutBtn = document.querySelector('[data-logout]');
+  const paymentModal = document.querySelector('#payment-modal');
+
+  let bookingsById = {};
+  let currentPaymentBookingId = null;
 
   function formatDate(value) {
     if (!value) return '—';
     return new Date(value).toLocaleString('ru-RU', {
       day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit',
     });
+  }
+
+  function formatMoney(value) {
+    return `${Number(value).toLocaleString('ru-RU')} ₽`;
   }
 
   function numberLabel(booking) {
@@ -41,28 +49,13 @@
     return `<span class="badge">${booking.status_display}</span>`;
   }
 
-  function renderPaymentBlock(booking) {
-    if (!booking.needs_payment) return '';
-    const details = (booking.payment_details || '').replace(/\n/g, '<br>');
-    return `
-      <div class="payment-panel" hidden data-payment-panel="${booking.id}">
-        <p class="card-meta" style="margin-top: 0.75rem;"><strong>Реквизиты для оплаты</strong></p>
-        <p class="card-meta">${details}</p>
-        ${booking.payment_stub?.enabled ? `
-          <button type="button" class="btn btn-primary btn-sm" data-confirm-pay="${booking.id}">
-            Подтвердить оплату (демо)
-          </button>
-        ` : ''}
-      </div>`;
-  }
-
   function renderBookingCard(booking) {
     const departure = booking.departure_at
       ? formatDate(booking.departure_at)
       : [booking.departure_date, booking.departure_time].filter(Boolean).join(', ');
     const displayNumber = booking.public_number || booking.application_code || booking.code;
     const paymentBtn = booking.needs_payment
-      ? `<button type="button" class="btn btn-primary btn-sm" data-show-payment="${booking.id}">Оплата</button>`
+      ? `<button type="button" class="btn btn-primary btn-sm" data-open-payment="${booking.id}">Оплата</button>`
       : '';
 
     return `
@@ -82,9 +75,8 @@
           <li><strong>Выезд</strong> <span>${departure}</span></li>
           <li><strong>Сбор</strong> <span>${booking.meeting_point}</span></li>
           <li><strong>Мест</strong> <span>${booking.seats}</span></li>
-          <li><strong>Сумма</strong> <span>${Number(booking.total_amount).toLocaleString('ru-RU')} ₽</span></li>
+          <li><strong>Сумма</strong> <span>${formatMoney(booking.total_amount)}</span></li>
         </ul>
-        ${renderPaymentBlock(booking)}
       </article>`;
   }
 
@@ -97,30 +89,99 @@
     container.innerHTML = items.map(renderBookingCard).join('');
   }
 
-  function bindBookingActions(container) {
-    if (!container) return;
-    container.addEventListener('click', async (event) => {
-      const showBtn = event.target.closest('[data-show-payment]');
-      if (showBtn) {
-        const id = showBtn.getAttribute('data-show-payment');
-        const panel = container.querySelector(`[data-payment-panel="${id}"]`);
-        if (panel) panel.hidden = !panel.hidden;
-        return;
-      }
+  function rememberBookings(data) {
+    bookingsById = {};
+    [...data.active, ...data.history].forEach((booking) => {
+      bookingsById[booking.id] = booking;
+    });
+  }
 
-      const payBtn = event.target.closest('[data-confirm-pay]');
-      if (!payBtn || !window.TyvaApi) return;
+  function openPaymentModal(bookingId) {
+    const booking = bookingsById[bookingId];
+    if (!booking || !paymentModal) return;
 
-      const id = payBtn.getAttribute('data-confirm-pay');
+    currentPaymentBookingId = bookingId;
+    const displayNumber = booking.public_number || booking.code;
+
+    paymentModal.querySelector('[data-modal-route]').textContent =
+      `${displayNumber} · ${booking.route_label}`;
+    paymentModal.querySelector('[data-modal-amount]').textContent =
+      formatMoney(booking.total_amount);
+
+    const detailsWrap = paymentModal.querySelector('[data-modal-details]');
+    const detailsText = paymentModal.querySelector('[data-modal-details-text]');
+    if (booking.payment_details) {
+      detailsText.innerHTML = booking.payment_details.replace(/\n/g, '<br>');
+      detailsWrap.hidden = false;
+    } else {
+      detailsText.textContent = '';
+      detailsWrap.hidden = true;
+    }
+
+    const sbpRadio = paymentModal.querySelector('input[name="modal-pay"][value="sbp"]');
+    if (sbpRadio) sbpRadio.checked = true;
+
+    const payBtn = paymentModal.querySelector('[data-modal-pay]');
+    if (payBtn) {
+      payBtn.disabled = false;
+      payBtn.textContent = `Оплатить ${formatMoney(booking.total_amount)}`;
+    }
+
+    paymentModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePaymentModal() {
+    if (!paymentModal) return;
+    paymentModal.hidden = true;
+    document.body.style.overflow = '';
+    currentPaymentBookingId = null;
+  }
+
+  function initPaymentModal() {
+    if (!paymentModal) return;
+
+    paymentModal.addEventListener('click', (event) => {
+      if (event.target === paymentModal) closePaymentModal();
+    });
+
+    paymentModal.querySelectorAll('[data-modal-close]').forEach((btn) => {
+      btn.addEventListener('click', closePaymentModal);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !paymentModal.hidden) closePaymentModal();
+    });
+
+    paymentModal.querySelector('[data-modal-pay]')?.addEventListener('click', async () => {
+      if (!currentPaymentBookingId || !window.TyvaApi) return;
+
+      const paymentMethod = paymentModal.querySelector('input[name="modal-pay"]:checked')?.value || 'sbp';
+      const payBtn = paymentModal.querySelector('[data-modal-pay]');
       payBtn.disabled = true;
+      payBtn.textContent = 'Оплата…';
+
       try {
-        await TyvaApi.payPrivateBooking(id);
+        await TyvaApi.payPrivateBooking(currentPaymentBookingId, paymentMethod);
+        closePaymentModal();
         const user = await TyvaApi.getMe();
         if (user) await loadAccount(user);
         alert('Оплата принята. Билет отправлен на email.');
       } catch (err) {
         alert(err.message || 'Не удалось провести оплату');
+        const booking = bookingsById[currentPaymentBookingId];
         payBtn.disabled = false;
+        if (booking) payBtn.textContent = `Оплатить ${formatMoney(booking.total_amount)}`;
+      }
+    });
+  }
+
+  function bindBookingActions(container) {
+    if (!container) return;
+    container.addEventListener('click', (event) => {
+      const openBtn = event.target.closest('[data-open-payment]');
+      if (openBtn) {
+        openPaymentModal(openBtn.getAttribute('data-open-payment'));
       }
     });
   }
@@ -133,6 +194,7 @@
     }
     if (window.TyvaAuthNav) TyvaAuthNav.update(user);
     const data = await TyvaApi.getMyBookings();
+    rememberBookings(data);
     renderList(activeList, data.active, 'Нет активных билетов. Купите билет на общий рейс или закажите личную поездку.');
     renderList(historyList, data.history, 'История поездок пока пуста.');
   }
@@ -153,6 +215,7 @@
 
   async function init() {
     initTabs();
+    initPaymentModal();
     bindBookingActions(activeList);
     try {
       await TyvaApi.ensureCsrf();

@@ -122,9 +122,15 @@ class PayPrivateBookingView(CsrfExemptAPIView):
         if not booking.needs_payment:
             return Response({'detail': 'Оплата для этой брони недоступна'}, status=status.HTTP_400_BAD_REQUEST)
 
+        payment_method = request.data.get('payment_method', Booking.PaymentMethod.SBP)
+        allowed = {Booking.PaymentMethod.SBP, Booking.PaymentMethod.CARD}
+        if payment_method not in allowed:
+            return Response({'detail': 'Выберите способ оплаты: СБП или карта'}, status=status.HTTP_400_BAD_REQUEST)
+
+        booking.payment_method = payment_method
         payment = process_stub_payment(booking)
         booking.status = Booking.Status.PAID
-        booking.save(update_fields=['status'])
+        booking.save(update_fields=['payment_method', 'status'])
 
         email_sent = False
         email_error = ''
