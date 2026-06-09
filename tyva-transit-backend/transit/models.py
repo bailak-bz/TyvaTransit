@@ -184,22 +184,29 @@ class Booking(models.Model):
         return self.status in {self.Status.PAID, self.Status.CONFIRMED}
 
     @property
-    def departure_sort_at(self):
+    def departure_day(self):
         if self.trip_id:
-            return self.trip.departure_at
-        if self.departure_date:
-            from datetime import datetime, time
-            return timezone.make_aware(datetime.combine(self.departure_date, time.min))
-        return None
+            return timezone.localtime(self.trip.departure_at).date()
+        return self.departure_date
+
+    @property
+    def active_until_day(self):
+        if (
+            self.booking_type == self.BookingType.PRIVATE
+            and self.round_trip
+            and self.return_date
+        ):
+            return self.return_date
+        return self.departure_day
 
     @property
     def is_upcoming(self) -> bool:
         if self.status == self.Status.CANCELLED:
             return False
-        dep = self.departure_sort_at
-        if dep is None:
+        end_day = self.active_until_day
+        if end_day is None:
             return self.status in {self.Status.PENDING, self.Status.PAID, self.Status.CONFIRMED}
-        return dep >= timezone.now()
+        return end_day >= timezone.localdate()
 
 
 class UserProfile(models.Model):
