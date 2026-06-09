@@ -5,6 +5,7 @@
 
   const routeSelect = form.querySelector('#route');
   const dateInput = form.querySelector('#date-out');
+  const dateBackInput = form.querySelector('#date-back');
   const timeSelect = form.querySelector('#time');
   const seatsInput = form.querySelector('#seats');
   const counter = form.querySelector('.counter');
@@ -12,9 +13,17 @@
   const summaryTotal = form.querySelector('[data-summary-total]');
 
   const PRICES = { bus_12: 18000, minivan_8: 14000 };
+  let destinations = [];
 
   function todayISO() {
     const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  function addDaysISO(iso, days) {
+    const d = new Date(`${iso}T12:00:00`);
+    d.setDate(d.getDate() + days);
     const pad = (n) => String(n).padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   }
@@ -42,12 +51,26 @@
     if (summaryTotal) summaryTotal.textContent = formatMoney(estimateTotal());
   }
 
-  function initDate() {
+  function initDates() {
     const today = todayISO();
     if (dateInput) {
       dateInput.min = today;
       if (!dateInput.value || dateInput.value < today) dateInput.value = today;
     }
+    if (dateBackInput) {
+      const out = dateInput?.value || today;
+      dateBackInput.min = out;
+      if (!dateBackInput.value || dateBackInput.value < out) {
+        dateBackInput.value = addDaysISO(out, 2);
+      }
+    }
+  }
+
+  function isOutboundDestination(d) {
+    if (d.slug === 'other') return true;
+    if (String(d.slug || '').endsWith('-back')) return false;
+    const label = String(d.route_label || '');
+    return !label.includes('→ Кызыл');
   }
 
   function prefillUser(user) {
@@ -58,6 +81,29 @@
     if (nameEl && !nameEl.value) nameEl.value = user.display_name || '';
     if (phoneEl && !phoneEl.value) phoneEl.value = user.phone || '';
     if (emailEl && !emailEl.value) emailEl.value = user.email || '';
+  }
+
+  function fillRoutes(items) {
+    destinations = items.filter(isOutboundDestination);
+    destinations.sort((a, b) => {
+      if (a.slug === 'other') return 1;
+      if (b.slug === 'other') return -1;
+      return (a.route_label || '').localeCompare(b.route_label || '', 'ru');
+    });
+
+    routeSelect.innerHTML = '';
+    if (!destinations.length) {
+      routeSelect.innerHTML = '<option value="">Нет направлений — обновите данные на сервере</option>';
+      return;
+    }
+    destinations.forEach((dest, index) => {
+      const option = document.createElement('option');
+      option.value = dest.id;
+      option.textContent = dest.route_label;
+      option.dataset.slug = dest.slug || '';
+      if (index === 0) option.selected = true;
+      routeSelect.appendChild(option);
+    });
   }
 
   if (counter && seatsInput) {
@@ -72,6 +118,14 @@
     });
   }
 
+  dateInput?.addEventListener('change', () => {
+    if (!dateBackInput || !dateInput.value) return;
+    dateBackInput.min = dateInput.value;
+    if (dateBackInput.value < dateInput.value) {
+      dateBackInput.value = addDaysISO(dateInput.value, 2);
+    }
+  });
+
   form.querySelectorAll('input[name="vehicle"]').forEach((el) => {
     el.addEventListener('change', updateSummary);
   });
@@ -81,24 +135,11 @@
     TyvaApi.getMe().then(prefillUser).catch(() => {});
   }
 
-  TyvaApi.getDestinations().then((items) => {
-    const outbound = items.filter((d) => d.route_label.startsWith('Кызыл →'));
-    routeSelect.innerHTML = '';
-    if (!outbound.length) {
-      routeSelect.innerHTML = '<option value="">Нет направлений</option>';
-      return;
-    }
-    outbound.forEach((dest, index) => {
-      const option = document.createElement('option');
-      option.value = dest.id;
-      option.textContent = dest.route_label;
-      if (index === 0) option.selected = true;
-      routeSelect.appendChild(option);
+  TyvaApi.getDestinations()
+    .then(fillRoutes)
+    .catch(() => {
+      routeSelect.innerHTML = '<option value="">Не удалось загрузить направления</option>';
     });
-  }).catch((err) => {
-    routeSelect.innerHTML = '<option value="">Ошибка загрузки</option>';
-    console.error(err);
-  });
 
   form.addEventListener('submit', (event) => event.preventDefault());
 
@@ -108,8 +149,15 @@
       return;
     }
 
+    const user = await TyvaApi.getMe();
+    if (!user) {
+      window.location.href = `login.html?next=${encodeURIComponent('private-book.html')}`;
+      return;
+    }
+
     const destinationId = Number(routeSelect.value);
-    if (!destinationId) {
+    const selected = destinations.find((d) => d.id === destinationId);
+    if (!destinationId || !selected) {
       alert('Выберите направление');
       return;
     }
@@ -123,12 +171,22 @@
     let departureTime = timeValue;
     let comment = form.querySelector('#comment').value.trim();
 
+    if (timeValue === 'other' && !comment) {
+      alert('Укажите желаемое время в комментарии');
+      return;
+    }
     if (timeValue === 'other') {
-      if (!comment) {
-        alert('Укажите желаемое время в комментарии');
-        return;
-      }
       departureTime = 'Другое (см. комментарий)';
+    }
+
+    if (selected.slug === 'other' && !comment) {
+      alert('Укажите нужное направление в комментарии');
+      return;
+    }
+
+    if (dateBackInput.value < dateInput.value) {
+      alert('Дата обратно не может быть раньше даты выезда');
+      return;
     }
 
     submitBtn.disabled = true;
@@ -139,6 +197,7 @@
         destination_id: destinationId,
         departure_date: dateInput.value,
         departure_time: departureTime,
+        return_date: dateBackInput.value,
         round_trip: true,
         vehicle_type: getVehicleType(),
         seats: Number(seatsInput.value),
@@ -162,6 +221,6 @@
     }
   });
 
-  initDate();
+  initDates();
   updateSummary();
 })();

@@ -3,6 +3,14 @@
   const btn = document.querySelector('#register-btn');
   if (!form || !btn) return;
 
+  const nextParam = new URLSearchParams(window.location.search).get('next');
+  if (nextParam && nextParam.endsWith('.html')) {
+    const loginLink = document.querySelector('a[href="login.html"]');
+    if (loginLink) {
+      loginLink.href = `login.html?next=${encodeURIComponent(nextParam)}`;
+    }
+  }
+
   form.addEventListener('submit', (event) => event.preventDefault());
 
   btn.addEventListener('click', async () => {
@@ -26,7 +34,8 @@
         display_name: form.querySelector('#name').value.trim(),
         phone: form.querySelector('#phone').value.trim(),
       });
-      window.location.href = 'account.html';
+      const next = new URLSearchParams(window.location.search).get('next');
+      window.location.href = next && next.endsWith('.html') ? next : 'account.html';
     } catch (err) {
       alert(err.message || 'Ошибка регистрации');
       btn.disabled = false;
@@ -35,7 +44,9 @@
 
   if (window.TyvaApi) {
     TyvaApi.getMe().then((user) => {
-      if (user) window.location.replace('account.html');
+      if (!user) return;
+      const next = new URLSearchParams(window.location.search).get('next');
+      window.location.replace(next && next.endsWith('.html') ? next : 'account.html');
     }).catch(() => {});
   }
 })();

@@ -3,7 +3,7 @@ import re
 from django.db import transaction
 from django.db.models import F
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .api_base import CsrfExemptAPIView
@@ -122,7 +122,7 @@ class SharedBookingCreateView(CsrfExemptAPIView):
 
 
 class PrivateBookingCreateView(CsrfExemptAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = PrivateBookingCreateSerializer(data=request.data)

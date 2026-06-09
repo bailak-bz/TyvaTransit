@@ -31,6 +31,12 @@ class Command(BaseCommand):
                 'meeting_point': 'ул. Кочетова, 2',
             },
             {
+                'slug': 'other',
+                'name': 'Другое',
+                'route_label': 'Другое (в комментарии)',
+                'meeting_point': 'ул. Кочетова, 2',
+            },
+            {
                 'slug': 'chagytay-back',
                 'name': 'Чагытай → Кызыл',
                 'route_label': 'Чагытай → Кызыл',
