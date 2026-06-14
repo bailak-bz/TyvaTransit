@@ -295,10 +295,8 @@ main {
 /* Hero */
 .hero {
   background:
-    linear-gradient(135deg, rgba(8, 65, 72, 0.82) 0%, rgba(13, 92, 99, 0.58) 55%, rgba(26, 122, 130, 0.48) 100%),
-    linear-gradient(160deg, #4a8f9c 0%, #1a5c63 40%, #084148 100%);
-  background-size: cover;
-  background-position: center;
+    linear-gradient(135deg, rgba(8, 65, 72, 0.78) 0%, rgba(13, 92, 99, 0.55) 55%, rgba(26, 122, 130, 0.45) 100%),
+    url("../images/azas-1.jpg") center / cover no-repeat;
   color: var(--white);
   padding: 2.5rem 1.25rem 3rem;
   position: relative;
@@ -409,21 +407,15 @@ main {
 }
 
 .card-image--chagytay {
-  background-image:
-    linear-gradient(135deg, rgba(61, 139, 153, 0.15) 0%, transparent 50%),
-    linear-gradient(160deg, #5a9fad 0%, #2d6a73 45%, #084148 100%);
+  background-image: url("../images/chagytay-1.jpg");
 }
 
 .card-image--tereh {
-  background-image:
-    linear-gradient(135deg, rgba(90, 143, 110, 0.2) 0%, transparent 50%),
-    linear-gradient(160deg, #6b9f7e 0%, #3d6b52 50%, #1e3d2e 100%);
+  background-image: url("../images/tereh-1.jpg");
 }
 
 .card-image--azas {
-  background-image:
-    linear-gradient(135deg, rgba(107, 140, 174, 0.2) 0%, transparent 50%),
-    linear-gradient(160deg, #7a9fbe 0%, #4a6d8a 50%, #2d4a5e 100%);
+  background-image: url("../images/azas-1.jpg");
 }
 
 .card-body {
@@ -1448,28 +1440,6 @@ main {
 .lake-content .card-actions {
   margin-top: 1.25rem;
 }
-
-.lake-gallery-slide {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  background-size: cover;
-  background-position: center;
-}
-
-.lake-gallery-slide--chagytay-1 { background-image: linear-gradient(135deg, #6eb5c4 0%, #2d6a73 50%, #084148 100%); }
-.lake-gallery-slide--chagytay-2 { background-image: linear-gradient(135deg, #8ec9d4 0%, #4a8f9c 60%, #1a4a52 100%); }
-.lake-gallery-slide--chagytay-3 { background-image: linear-gradient(160deg, #5a9fad 0%, #3d6b52 50%, #084148 100%); }
-.lake-gallery-slide--chagytay-4 { background-image: linear-gradient(200deg, #7ab8c4 0%, #2d5a63 70%, #0a3038 100%); }
-.lake-gallery-slide--tereh-1 { background-image: linear-gradient(135deg, #7ab896 0%, #3d6b52 50%, #1e3d2e 100%); }
-.lake-gallery-slide--tereh-2 { background-image: linear-gradient(135deg, #8ec9a8 0%, #4a7a5e 60%, #2a4a38 100%); }
-.lake-gallery-slide--tereh-3 { background-image: linear-gradient(160deg, #6b9f7e 0%, #2d5a3d 50%, #1a3028 100%); }
-.lake-gallery-slide--tereh-4 { background-image: linear-gradient(200deg, #9ed4b0 0%, #3d6b4a 70%, #1e3828 100%); }
-.lake-gallery-slide--azas-1 { background-image: linear-gradient(135deg, #8eb0cc 0%, #4a6d8a 50%, #2d4a5e 100%); }
-.lake-gallery-slide--azas-2 { background-image: linear-gradient(135deg, #a0c0d8 0%, #5a7a96 60%, #3a5268 100%); }
-.lake-gallery-slide--azas-3 { background-image: linear-gradient(160deg, #7a9fbe 0%, #3d5a7a 50%, #1e3048 100%); }
-.lake-gallery-slide--azas-4 { background-image: linear-gradient(200deg, #9eb8d0 0%, #4a6888 70%, #2a4058 100%); }
 
 .card--narrow {
   max-width: 480px;
