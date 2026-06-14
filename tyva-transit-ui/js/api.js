@@ -95,6 +95,32 @@
 
   global.TyvaApiConfig = { base: API_BASE, backend: BACKEND_URL };
 
+  global.TyvaFormat = {
+    money(value) {
+      return `${Number(value).toLocaleString('ru-RU')} ₽`;
+    },
+    date(iso, withWeekday) {
+      if (!iso) return '—';
+      const opts = withWeekday
+        ? { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }
+        : { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+      return new Date(iso).toLocaleString('ru-RU', opts);
+    },
+    duration(hours) {
+      const h = Number(hours);
+      if (!h || Number.isNaN(h)) return 'уточняется';
+      return h % 1 === 0 ? `около ${h} ч` : `около ${h.toLocaleString('ru-RU')} ч`;
+    },
+  };
+
+  const LAKE_PAGES = {
+    chagytay: 'lake-chagytay.html',
+    'tereh-hol': 'lake-tereh-hol.html',
+    azas: 'lake-azas.html',
+  };
+
+  global.TyvaLakes = { pageForSlug: (slug) => LAKE_PAGES[slug] || null };
+
   function tripSeatsAvailable(trip) {
     const total = Number(trip.seats_total);
     const booked = Number(trip.seats_booked);
@@ -122,10 +148,7 @@
   global.TyvaSeats = { badge: seatsBadge, label: seatsLabel, available: tripSeatsAvailable };
 
   function formatTripDate(iso, withWeekday) {
-    const opts = withWeekday
-      ? { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }
-      : { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return new Date(iso).toLocaleString('ru-RU', opts);
+    return TyvaFormat.date(iso, withWeekday);
   }
 
   function renderTripCard(trip, layout) {
@@ -144,7 +167,7 @@
       <article class="card">
         <div class="card-body">
           <span class="${badge.className}">${badge.text}</span>
-          <h3 style="margin: 0.5rem 0 0;">${trip.route_label}</h3>
+          <h3 class="card-title">${trip.route_label}</h3>
           <p class="card-meta">${dateLabel}</p>
           ${meeting}
           <p class="card-price">${Number(trip.price_per_seat).toLocaleString('ru-RU')} ₽ <span>/ место</span></p>

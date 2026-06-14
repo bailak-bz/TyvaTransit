@@ -48,6 +48,10 @@ class TripListView(CsrfExemptAPIView):
         if available_only == 'yes':
             qs = qs.filter(seats_booked__lt=F('seats_total'))
 
+        limit = request.query_params.get('limit')
+        if limit and str(limit).isdigit():
+            qs = qs[: int(limit)]
+
         return Response(TripSerializer(qs, many=True).data)
 
 

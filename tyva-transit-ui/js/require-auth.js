@@ -1,5 +1,5 @@
 (function () {
-  const PROTECTED = new Set(['private.html', 'private-book.html']);
+  const PROTECTED = new Set(['private-book.html']);
 
   function currentPage() {
     const path = window.location.pathname.split('/').pop();

@@ -10,8 +10,11 @@
   --success: #2d6a4f;
   --warning: #b8860b;
   --danger: #9b2226;
+  --border: #e8ecee;
+  --bg: #f7f4ef;
   --radius: 12px;
   --shadow: 0 4px 24px rgba(8, 65, 72, 0.12);
+  --shadow-sm: 0 2px 12px rgba(8, 65, 72, 0.08);
   --font: "Segoe UI", system-ui, -apple-system, sans-serif;
   --header-h: 3.5rem;
   --safe-top: env(safe-area-inset-top, 0px);
@@ -245,6 +248,25 @@ img {
   font-size: 0.85rem;
 }
 
+.btn-ghost {
+  background: transparent;
+  color: var(--lake);
+  border: 1px solid var(--lake);
+}
+
+.btn-ghost:hover {
+  background: var(--sky);
+}
+
+.btn.is-disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
 /* Layout */
 main {
   flex: 1;
@@ -273,8 +295,10 @@ main {
 /* Hero */
 .hero {
   background:
-    linear-gradient(135deg, rgba(8, 65, 72, 0.78) 0%, rgba(13, 92, 99, 0.55) 55%, rgba(26, 122, 130, 0.45) 100%),
-    url("../images/azas-1.jpg") center / cover no-repeat;
+    linear-gradient(135deg, rgba(8, 65, 72, 0.82) 0%, rgba(13, 92, 99, 0.58) 55%, rgba(26, 122, 130, 0.48) 100%),
+    linear-gradient(160deg, #4a8f9c 0%, #1a5c63 40%, #084148 100%);
+  background-size: cover;
+  background-position: center;
   color: var(--white);
   padding: 2.5rem 1.25rem 3rem;
   position: relative;
@@ -324,6 +348,14 @@ main {
   font-size: 1.25rem;
   margin: 0 0 1rem;
   color: var(--lake-dark);
+}
+
+.section-title--spaced {
+  margin-top: 2.5rem;
+}
+
+.card-title {
+  margin: 0.5rem 0 0;
 }
 
 .card-grid {
@@ -377,15 +409,21 @@ main {
 }
 
 .card-image--chagytay {
-  background-image: url("../images/chagytay-1.jpg");
+  background-image:
+    linear-gradient(135deg, rgba(61, 139, 153, 0.15) 0%, transparent 50%),
+    linear-gradient(160deg, #5a9fad 0%, #2d6a73 45%, #084148 100%);
 }
 
 .card-image--tereh {
-  background-image: url("../images/tereh-1.jpg");
+  background-image:
+    linear-gradient(135deg, rgba(90, 143, 110, 0.2) 0%, transparent 50%),
+    linear-gradient(160deg, #6b9f7e 0%, #3d6b52 50%, #1e3d2e 100%);
 }
 
 .card-image--azas {
-  background-image: url("../images/azas-1.jpg");
+  background-image:
+    linear-gradient(135deg, rgba(107, 140, 174, 0.2) 0%, transparent 50%),
+    linear-gradient(160deg, #7a9fbe 0%, #4a6d8a 50%, #2d4a5e 100%);
 }
 
 .card-body {
@@ -1081,7 +1119,7 @@ main {
 }
 
 .mode-card h3 {
-  margin: 0 0 0.5rem;
+  margin: 0.75rem 0 0.5rem;
   color: var(--lake-dark);
   font-size: 1.15rem;
 }
@@ -1397,6 +1435,83 @@ main {
 
 .lake-content {
   padding: 1.25rem 1.5rem;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 1.25rem;
+}
+
+.lake-content h2:first-child {
+  margin-top: 0;
+}
+
+.lake-content .card-actions {
+  margin-top: 1.25rem;
+}
+
+.lake-gallery-slide {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background-size: cover;
+  background-position: center;
+}
+
+.lake-gallery-slide--chagytay-1 { background-image: linear-gradient(135deg, #6eb5c4 0%, #2d6a73 50%, #084148 100%); }
+.lake-gallery-slide--chagytay-2 { background-image: linear-gradient(135deg, #8ec9d4 0%, #4a8f9c 60%, #1a4a52 100%); }
+.lake-gallery-slide--chagytay-3 { background-image: linear-gradient(160deg, #5a9fad 0%, #3d6b52 50%, #084148 100%); }
+.lake-gallery-slide--chagytay-4 { background-image: linear-gradient(200deg, #7ab8c4 0%, #2d5a63 70%, #0a3038 100%); }
+.lake-gallery-slide--tereh-1 { background-image: linear-gradient(135deg, #7ab896 0%, #3d6b52 50%, #1e3d2e 100%); }
+.lake-gallery-slide--tereh-2 { background-image: linear-gradient(135deg, #8ec9a8 0%, #4a7a5e 60%, #2a4a38 100%); }
+.lake-gallery-slide--tereh-3 { background-image: linear-gradient(160deg, #6b9f7e 0%, #2d5a3d 50%, #1a3028 100%); }
+.lake-gallery-slide--tereh-4 { background-image: linear-gradient(200deg, #9ed4b0 0%, #3d6b4a 70%, #1e3828 100%); }
+.lake-gallery-slide--azas-1 { background-image: linear-gradient(135deg, #8eb0cc 0%, #4a6d8a 50%, #2d4a5e 100%); }
+.lake-gallery-slide--azas-2 { background-image: linear-gradient(135deg, #a0c0d8 0%, #5a7a96 60%, #3a5268 100%); }
+.lake-gallery-slide--azas-3 { background-image: linear-gradient(160deg, #7a9fbe 0%, #3d5a7a 50%, #1e3048 100%); }
+.lake-gallery-slide--azas-4 { background-image: linear-gradient(200deg, #9eb8d0 0%, #4a6888 70%, #2a4058 100%); }
+
+.card--narrow {
+  max-width: 480px;
+  margin-bottom: 2rem;
+}
+
+.detail-hero-badges .badge:first-child {
+  margin-bottom: 0.35rem;
+  display: inline-block;
+}
+
+.detail-hero-badges .badge + .badge {
+  margin-left: 0.35rem;
+}
+
+.detail-content h2 {
+  font-size: 1.1rem;
+}
+
+.detail-content h2:first-child {
+  margin-top: 0;
+}
+
+.detail-sidebar .btn + .btn {
+  margin-top: 0.5rem;
+}
+
+.success-box .page-title {
+  margin: 0.75rem 0 0.5rem;
+}
+
+.success-box .page-lead {
+  margin: 0 auto 1rem;
+}
+
+.success-box .info-list {
+  text-align: left;
+  margin: 1.5rem 0;
+}
+
+.vehicle-option .form-hint {
+  margin: 0;
 }
 
 .card-actions--stack .btn {

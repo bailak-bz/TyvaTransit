@@ -1,8 +1,13 @@
 (function () {
   const params = new URLSearchParams(window.location.search);
   const tripId = params.get('trip');
+  if (!tripId) {
+    window.location.replace('trips.html');
+    return;
+  }
+
   const form = document.querySelector('form');
-  if (!form || !tripId) return;
+  if (!form) return;
 
   const seatsInput = form.querySelector('input[type="number"]');
   const counter = form.querySelector('.counter');
@@ -15,13 +20,11 @@
   let trip = null;
 
   function formatMoney(value) {
-    return `${Number(value).toLocaleString('ru-RU')} ₽`;
+    return TyvaFormat.money(value);
   }
 
   function formatDate(iso) {
-    return new Date(iso).toLocaleString('ru-RU', {
-      day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit',
-    });
+    return TyvaFormat.date(iso);
   }
 
   function updateSummary() {
@@ -103,6 +106,7 @@
         payment_method: paymentMethod,
       });
       sessionStorage.setItem('tyva_last_booking', JSON.stringify(result.booking));
+      sessionStorage.setItem('tyva_lookup_phone', form.querySelector('#phone').value.trim());
       sessionStorage.setItem('tyva_email_sent', result.email_sent ? '1' : '0');
       if (result.email_error) {
         sessionStorage.setItem('tyva_email_error', result.email_error);
